@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">BOE画屏发布系统</div>
+        <div class="logo">BOE商用画屏发布系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 消息中心 -->

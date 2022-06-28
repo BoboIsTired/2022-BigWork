@@ -41,10 +41,10 @@ export default {
             {
                 icon: "el-icon-lx-home",
                 index: "/dashboard",
-                title: "系统首页",
+                title: "首页概览",
             },
             {
-                icon: "el-icon-lx-calendar",
+                icon: "el-icon-lx-pic",
                 index: "2",
                 title: "素材管理",
                 subs: [
@@ -55,7 +55,7 @@ export default {
                 ],
             },
             {
-                icon: "el-icon-lx-calendar",
+                icon: "el-icon-lx-text",
                 index: "3",
                 title: "节目制作与发布",
                 subs: [
@@ -63,27 +63,39 @@ export default {
                         index: "/tableP",
                         title: "发布节目",
                     },
-                ],
-            },
-            {
-                icon: "el-icon-lx-calendar",
-                index: "4",
-                title: "计划管理",
-                subs: [
                     {
-                        index: "/tableM",
-                        title: "素材列表",
+                        index: "/tableN",
+                        title: "发布公告",
                     },
                 ],
             },
             {
-                icon: "el-icon-lx-calendar",
+                icon: "el-icon-lx-vipcard",
+                index: "4",
+                title: "计划管理",
+                subs: [
+                    {
+                        index: "/tablePlan",
+                        title: "计划列表",
+                    },
+                    {
+                        index: "/tablePlanM",
+                        title: "计划审核",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-news",
                 index: "5",
                 title: "设备管理",
                 subs: [
                     {
-                        index: "/tableM",
-                        title: "素材列表",
+                        index: "/tableMachine",
+                        title: "设备列表",
+                    },
+                    {
+                        index: "/tableG",
+                        title: "分组管理",
                     },
                 ],
             },
@@ -93,8 +105,8 @@ export default {
                 title: "系统管理",
                 subs: [
                     {
-                        index: "/tableM",
-                        title: "素材列表",
+                        index: "/tableUser",
+                        title: "账户管理",
                     },
                 ],
             },
@@ -133,11 +145,11 @@ export default {
             //         },
             //     ],
             // },
-            {
-                icon: "el-icon-lx-emoji",
-                index: "/icon",
-                title: "自定义图标",
-            },
+            // {
+            //     icon: "el-icon-lx-emoji",
+            //     index: "/icon",
+            //     title: "自定义图标",
+            // },
             // {
             //     icon: "el-icon-pie-chart",
             //     index: "/charts",

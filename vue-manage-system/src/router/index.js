@@ -38,7 +38,49 @@ const routes = [
                     title: '发布节目'
                 },
                 component: () => import ( /* webpackChunkName: "table" */ "../views/ProgramTable.vue")
-            },  {
+            },{
+                path: "/tableN",
+                name: "basetableN",
+                meta: {
+                    title: '发布公告'
+                },
+                component: () => import ( /* webpackChunkName: "table" */ "../views/NoticeList.vue")
+            },{
+                path: "/tablePlan",
+                name: "basetablePlan",
+                meta: {
+                    title: '计划列表'
+                },
+                component: () => import ( /* webpackChunkName: "table" */ "../views/PlanList.vue")
+            }, {
+                path: "/tablePlanM",
+                name: "basetablePlanM",
+                meta: {
+                    title: '计划审核'
+                },
+                component: () => import ( /* webpackChunkName: "table" */ "../views/PlanListManager.vue")
+            }, {
+                path: "/tableMachine",
+                name: "basetableMachine",
+                meta: {
+                    title: '设备列表'
+                },
+                component: () => import ( /* webpackChunkName: "table" */ "../views/MachineList.vue")
+            }, {
+                path: "/tableG",
+                name: "basetableG",
+                meta: {
+                    title: '分组管理'
+                },
+                component: () => import ( /* webpackChunkName: "table" */ "../views/GroupManager.vue")
+            },{
+                path: "/tableUser",
+                name: "basetableU",
+                meta: {
+                    title: '账户管理'
+                },
+                component: () => import ( /* webpackChunkName: "table" */ "../views/UserManager.vue")
+            },{
                 path: "/charts",
                 name: "basecharts",
                 meta: {

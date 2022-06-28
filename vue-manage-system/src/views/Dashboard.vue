@@ -1,6 +1,75 @@
 <template>
     <div>
         <el-row :gutter="20">
+            <el-col :span="24">
+                <el-row :gutter="20" class="mgb20">
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                            <div class="grid-content grid-con-1">
+                                <i class="el-icon-lx-mobilefill grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{num_m}}</div>
+                                    <div>设备数量</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                            <div class="grid-content grid-con-2">
+                                <i class="el-icon-lx-recordfill grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{num_p}}</div>
+                                    <div>节目数量</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
+                            <div class="grid-content grid-con-3">
+                                <i class="el-icon-lx-noticefill grid-con-icon"></i>
+                                <div class="grid-cont-right">
+                                    <div class="grid-num">{{num_plan}}</div>
+                                    <div>计划数量</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                
+            </el-col>
+            <el-col :span="8">
+                <el-card shadow="hover" style="height:403px;">
+                    <template #header>
+                        <div class="clearfix">
+                            <span>待办事项</span>
+                            <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
+                        </div>
+                    </template>
+
+                    <el-table :show-header="false" :data="todoList" style="width:100%;">
+                        <el-table-column width="40">
+                            <template #default="scope">
+                                <el-checkbox v-model="scope.row.status"></el-checkbox>
+                            </template>
+                        </el-table-column>
+                        <el-table-column>
+                            <template #default="scope">
+                                <div class="todo-item" :class="{
+                                        'todo-item-del': scope.row.status,
+                                    }">{{ scope.row.title }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column width="60">
+                            <template>
+                                <i class="el-icon-edit"></i>
+                                <i class="el-icon-delete"></i>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-card>
+            </el-col>
             <el-col :span="8">
                 <el-card shadow="hover" class="mgb20" style="height:252px;">
                     <div class="user-info">
@@ -32,72 +101,6 @@
                     <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
                 </el-card>
             </el-col>
-            <el-col :span="16">
-                <el-row :gutter="20" class="mgb20">
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-                            <div class="grid-content grid-con-1">
-                                <i class="el-icon-user-solid grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-                            <div class="grid-content grid-con-2">
-                                <i class="el-icon-message-solid grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>系统消息</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-                            <div class="grid-content grid-con-3">
-                                <i class="el-icon-s-goods grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>数量</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                </el-row>
-                <el-card shadow="hover" style="height:403px;">
-                    <template #header>
-                        <div class="clearfix">
-                            <span>待办事项</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
-                        </div>
-                    </template>
-
-                    <el-table :show-header="false" :data="todoList" style="width:100%;">
-                        <el-table-column width="40">
-                            <template #default="scope">
-                                <el-checkbox v-model="scope.row.status"></el-checkbox>
-                            </template>
-                        </el-table-column>
-                        <el-table-column>
-                            <template #default="scope">
-                                <div class="todo-item" :class="{
-                                        'todo-item-del': scope.row.status,
-                                    }">{{ scope.row.title }}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column width="60">
-                            <template>
-                                <i class="el-icon-edit"></i>
-                                <i class="el-icon-delete"></i>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-card>
-            </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="12">
@@ -121,9 +124,11 @@ export default {
     name: "dashboard",
     components: { Schart },
     setup() {
+        let num_p = '321';
+        let num_plan = '321';
+        let num_m = '321';
         const name = localStorage.getItem("ms_username");
         const role = name === "admin" ? "超级管理员" : "普通用户";
-
         const data = reactive([
             {
                 name: "2018/09/04",
@@ -225,6 +230,9 @@ export default {
         ]);
 
         return {
+            num_p,
+            num_plan,
+            num_m,
             name,
             data,
             options,
