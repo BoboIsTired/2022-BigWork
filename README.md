@@ -1,6 +1,6 @@
-vue模板官方文档： https://pro.antdv.com/
+ant design pro vue官方文档： https://pro.antdv.com/
 
-新vue官方文档：https://iczer.gitee.io/vue-antd-admin-docs/
+vue antd admin官方文档：https://iczer.gitee.io/vue-antd-admin-docs/
 
 贡献人员：
 
