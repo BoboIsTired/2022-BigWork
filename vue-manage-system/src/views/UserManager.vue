@@ -81,23 +81,25 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { fetchData } from "../api/index";
-
+import axios from 'axios';
 export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            address: "",
-            name: "",
-            pageIndex: 1,
-            pageSize: 10,
+            // address: "",
+            // name: "",
+            // pageIndex: 1,
+            // pageSize: 10,
+            
         });
         const tableData = ref([]);
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
             fetchData(query).then((res) => {
-                tableData.value = res.list;
-                pageTotal.value = res.pageTotal || 50;
+                console.log(res.data)
+                // tableData.value = res.list;
+                // pageTotal.value = res.pageTotal || 50;
             });
         };
         getData();
