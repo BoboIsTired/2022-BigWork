@@ -63,20 +63,28 @@ const options = {
           component: PageView,
           children: [
             {
-              path: 'basic',
-              name: '基础表单',
-              component: () => import('@/pages/form/basic'),
+              path: 'sucaiL',
+              name: '素材列表',
+              meta: {
+                authority: 'queryForm',
+              },
+              component: () => import('@/pages/list/QueryList'),
             },
-            {
-              path: 'step',
-              name: '分步表单',
-              component: () => import('@/pages/form/step'),
-            },
-            {
-              path: 'advance',
-              name: '高级表单',
-              component: () => import('@/pages/form/advance'),
-            }
+            // {
+            //   path: 'basic',
+            //   name: '基础表单',
+            //   component: () => import('@/pages/form/basic'),
+            // },
+            // {
+            //   path: 'step',
+            //   name: '分步表单',
+            //   component: () => import('@/pages/form/step'),
+            // },
+            // {
+            //   path: 'advance',
+            //   name: '高级表单',
+            //   component: () => import('@/pages/form/advance'),
+            // }
           ]
         },
         {
@@ -88,54 +96,45 @@ const options = {
           component: PageView,
           children: [
             {
-              path: 'query',
+              path: 'programP',
               name: '发布节目',
               meta: {
                 authority: 'queryForm',
               },
-              component: () => import('@/pages/list/QueryList'),
+              component: () => import('@/pages/list/programPublish'),
             },
             {
-              path: 'query/detail/:id',
-              name: '查询详情',
-              meta: {
-                highlight: '/list/query',
-                invisible: true
-              },
-              component: () => import('@/pages/Demo')
-            },
-            {
-              path: 'primary',
+              path: 'NoticeP',
               name: '发布公告',
-              component: () => import('@/pages/list/StandardList'),
+              component: () => import('@/pages/list/NoticePublish'),
             },
-            {
-              path: 'card',
-              name: '卡片列表',
-              component: () => import('@/pages/list/CardList'),
-            },
-            {
-              path: 'search',
-              name: '搜索列表',
-              component: () => import('@/pages/list/search/SearchLayout'),
-              children: [
-                {
-                  path: 'article',
-                  name: '文章',
-                  component: () => import('@/pages/list/search/ArticleList'),
-                },
-                {
-                  path: 'application',
-                  name: '应用',
-                  component: () => import('@/pages/list/search/ApplicationList'),
-                },
-                {
-                  path: 'project',
-                  name: '项目',
-                  component: () => import('@/pages/list/search/ProjectList'),
-                }
-              ]
-            }
+            // {
+            //   path: 'card',
+            //   name: '卡片列表',
+            //   component: () => import('@/pages/list/CardList'),
+            // },
+            // {
+            //   path: 'search',
+            //   name: '搜索列表',
+            //   component: () => import('@/pages/list/search/SearchLayout'),
+            //   children: [
+            //     {
+            //       path: 'article',
+            //       name: '文章',
+            //       component: () => import('@/pages/list/search/ArticleList'),
+            //     },
+            //     {
+            //       path: 'application',
+            //       name: '应用',
+            //       component: () => import('@/pages/list/search/ApplicationList'),
+            //     },
+            //     {
+            //       path: 'project',
+            //       name: '项目',
+            //       component: () => import('@/pages/list/search/ProjectList'),
+            //     }
+            //   ]
+            // }
           ]
         },
         {
@@ -147,15 +146,31 @@ const options = {
           component: BlankView,
           children: [
             {
-              path: 'basic',
-              name: '基础详情页',
-              component: () => import('@/pages/detail/BasicDetail')
+              path: 'planL',
+              name: '计划列表',
+              meta: {
+                authority: 'queryForm',
+              },
+              component: () => import('@/pages/list/PlanList'),
             },
             {
-              path: 'advance',
-              name: '高级详情页',
-              component: () => import('@/pages/detail/AdvancedDetail')
-            }
+              path: 'planM',
+              name: '计划审核',
+              meta: {
+                authority: 'queryForm',
+              },
+              component: () => import('@/pages/list/PlanManager'),
+            },
+            // {
+            //   path: 'basic',
+            //   name: '基础详情页',
+            //   component: () => import('@/pages/detail/BasicDetail')
+            // },
+            // {
+            //   path: 'advance',
+            //   name: '高级详情页',
+            //   component: () => import('@/pages/detail/AdvancedDetail')
+            // }
           ]
         },
         {
@@ -167,15 +182,31 @@ const options = {
           component: PageView,
           children: [
             {
-              path: 'success',
-              name: '成功',
-              component: () => import('@/pages/result/Success')
+              path: 'goodsL',
+              name: '设备列表',
+              meta: {
+                authority: 'queryForm',
+              },
+              component: () => import('@/pages/list/GoodsList'),
             },
             {
-              path: 'error',
-              name: '失败',
-              component: () => import('@/pages/result/Error')
-            }
+              path: 'groupM',
+              name: '分组管理',
+              meta: {
+                authority: 'queryForm',
+              },
+              component: () => import('@/pages/list/GroupManager'),
+            },
+            // {
+            //   path: 'success',
+            //   name: '成功',
+            //   component: () => import('@/pages/result/Success')
+            // },
+            // {
+            //   path: 'error',
+            //   name: '失败',
+            //   component: () => import('@/pages/result/Error')
+            // }
           ]
         },
         {
