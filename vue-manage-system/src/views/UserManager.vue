@@ -81,7 +81,6 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { fetchData } from "../api/index";
-import axios from 'axios';
 export default {
     name: "basetable",
     setup() {
