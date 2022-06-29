@@ -31,5 +31,6 @@ public class FileController {
         upload.setSize(file.getSize());
         //存储到本地
         //
+        return "";
     }
 }
