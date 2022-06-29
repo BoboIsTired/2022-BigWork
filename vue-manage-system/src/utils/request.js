@@ -4,7 +4,7 @@ const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
     baseURL: '/api',
-    timeout: 5000
+    timeout: 6000
 });
 
 service.interceptors.request.use(
