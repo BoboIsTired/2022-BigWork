@@ -38,12 +38,12 @@
                 <el-table-column prop="enable" label="状态">
                   <template #default="scope">
                         <el-tag :type="
-                                scope.row.state === '1'
+                                scope.row.enable === '1'
                                     ? 'success'
-                                    : scope.row.state === '0'
+                                    : scope.row.enable === '0'
                                     ? 'danger'
                                     : ''
-                            ">{{ scope.row.state }}</el-tag>
+                            ">{{ scope.row.enable }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="realName" label="真实姓名"></el-table-column>

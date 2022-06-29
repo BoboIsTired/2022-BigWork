@@ -9,11 +9,4 @@ export const fetchData = query => {
     });
 };
 
-export const login = query => {
-    return request({
 
-        url: '/admin/login',
-        method: 'post',
-        params: params
-    });
-};
