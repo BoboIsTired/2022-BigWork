@@ -3,11 +3,11 @@ package com.example.demo.controller;
 
 
 import cn.hutool.core.io.FileUtil;
+//import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.demo.entity.Material;
 //import lombok.Value;
-import com.example.demo.mapper.AdminMapper;
 import com.example.demo.mapper.MaterialMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -36,6 +40,7 @@ public class MaterialController {
     @Value("${files.upload.path}")
     private String fileUploadPath;
 
+    //上传
     @PostMapping
     public String upload(@RequestParam MultipartFile file) throws IOException {
 
@@ -55,7 +60,29 @@ public class MaterialController {
             //把文件存储到磁盘目录
         file.transferTo(uploadFile);
         //存储数据库
-//        materialMapper
-        return "";
+        upload.setCreateDate(LocalDateTime.now());
+//        String url = "http://localhost:3000/material/"+uuid;
+        String url = uuid + StrUtil.DOT + upload.getType();
+        upload.setUrl(url);
+        materialMapper.insert(upload);
+        return upload.getUrl();
     }
+
+    //下载
+    @GetMapping("/{url}")
+    public void download(@PathVariable String url, HttpServletResponse response) throws IOException{
+        //根据文件标识获取文件
+        File uploadFile = new File(fileUploadPath + url);
+        //设置输出流格式
+        ServletOutputStream os = response.getOutputStream();
+//        String ss = URLEncoder.encode(url, "utf-8");
+        response.addHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(url,"UTF-8"));
+        response.setContentType("application/octet-stream");
+
+        //读取文件的字节流
+        os.write(FileUtil.readBytes(uploadFile));
+        os.flush();
+        os.close();
+    }
+
 }
