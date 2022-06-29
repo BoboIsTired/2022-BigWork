@@ -2,9 +2,8 @@ package com.example.demo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class File implements Serializable {
+public class Material implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +38,9 @@ public class File implements Serializable {
 
     private String description;
 
-    private Integer isDelete;
+    private long isDelete;
 
     private LocalDateTime createDate;
+
+
 }
