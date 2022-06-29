@@ -28,6 +28,7 @@
                 <el-input v-model="query.name" placeholder="请选择所属角色" class="handle-input mr10"></el-input>
                 <el-button @click="handleSearch">重置</el-button>
                 <el-button type="primary"  @click="handleSearch">搜索</el-button>
+                <el-button type="primary"  @click="handleCreate">新建账户</el-button>
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
                 <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
@@ -132,6 +133,53 @@
                 </span>
             </template>
         </el-dialog>
+
+        <!-- 新建弹出框 -->
+         <el-dialog title="新建账户" v-model="createVisible" width="30%">
+            <el-form label-width="70px">
+                <el-form-item label="账户名">
+                    <el-input v-model="form.name"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input
+                      v-model="form.password"
+                      type="password"
+                      placeholder="Please input password"
+                      show-password
+                    />
+                </el-form-item>
+                <el-form-item label="所属机构">
+                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属角色">
+                    <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="账号状态">
+                    <el-select v-model="form.state" placeholder="账号状态" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="真实姓名">
+                    <el-input v-model="form.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="form.mail"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input v-model="form.phoneNumber"></el-input>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="createVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="saveEdit">确 定</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -200,6 +248,8 @@ export default {
 
         // 表格编辑时弹窗和保存
         const editVisible = ref(false);
+        //新建账户弹窗和保存
+        const createVisible = ref(false);
         let form = reactive({
             name: "",
             password:"dadasdasda",
@@ -219,6 +269,11 @@ export default {
             });
             editVisible.value = true;
         };
+        const handleCreate = () => {
+           
+            createVisible.value = true;
+            console.log(createVisible.value)
+        };
         const saveEdit = () => {
             editVisible.value = false;
             ElMessage.success(`修改第 ${idx + 1} 行成功`);
@@ -232,12 +287,14 @@ export default {
             tableData,
             pageTotal,
             editVisible,
+            createVisible,
             form,
             handleSearch,
             handlePageChange,
             handleDelete,
             handleEdit,
             saveEdit,
+            handleCreate
         };
     },
 };
