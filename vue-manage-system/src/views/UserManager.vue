@@ -32,24 +32,24 @@
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
                 <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
-                <el-table-column prop="name" label="账户名"></el-table-column>
-                <el-table-column prop="organization" label="所属机构"></el-table-column>
+                <el-table-column prop="accountName" label="账户名"></el-table-column>
+                <el-table-column prop="mechanism" label="所属机构"></el-table-column>
                 <el-table-column prop="role" label="所属角色"></el-table-column>
-                <el-table-column prop="state" label="状态">
+                <el-table-column prop="enable" label="状态">
                   <template #default="scope">
                         <el-tag :type="
-                                scope.row.state === '已启用'
+                                scope.row.state === '1'
                                     ? 'success'
-                                    : scope.row.state === '已停用'
+                                    : scope.row.state === '0'
                                     ? 'danger'
                                     : ''
                             ">{{ scope.row.state }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="realName" label="真实姓名"></el-table-column>
-                <el-table-column prop="phoneNumber" label="手机号"></el-table-column>
-                <el-table-column prop="mail" label="邮箱"></el-table-column>
-                <el-table-column prop="updateTime" label="更行时间"></el-table-column>
+                <el-table-column prop="phone" label="手机号"></el-table-column>
+                <el-table-column prop="email" label="邮箱"></el-table-column>
+                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                 <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
@@ -191,11 +191,6 @@ export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            // address: "",
-            // name: "",
-            // pageIndex: 1,
-            // pageSize: 10,
-
             
         });
         const tableData = ref([
@@ -205,7 +200,7 @@ export default {
             role:"me",
             state:"已启用",
             realName:"ajie",
-            phoneNumber:1888888888,
+            phone:1888888888,
             mail:"xfs@qq.com",
             updateTime:"4564",
             userType:"adas"
@@ -215,8 +210,9 @@ export default {
         // 获取表格数据
         const getData = () => {
             fetchData(query).then((res) => {
-                console.log(res.data)
-                // tableData.value = res.list;
+                var list=res.data
+                console.log(list)
+                tableData.value = list.records;
                 // pageTotal.value = res.pageTotal || 50;
             });
         };
