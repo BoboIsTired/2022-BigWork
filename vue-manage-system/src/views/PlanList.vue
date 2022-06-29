@@ -3,33 +3,61 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i>计划管理/计划列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
+                <!-- <div class="query"> -->
+                  <span>计划名称：</span>
+                  <el-input v-model="query.name" size="small" placeholder="请输入账户名称" class="handle-input mr10"></el-input>
+                <!-- </div> -->
+                <!-- <el-input v-model="query.name" placeholder="请输入账户名称" class="handle-input mr10"></el-input> -->
+                <span>计划状态：</span>
+                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10" >
                     <el-option key="1" label="广东省" value="广东省"></el-option>
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
                 </el-select>
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+               
+                <el-button @click="handleSearch">重置</el-button>
+                <el-button type="primary"  @click="handleSearch">搜索</el-button>
+                <el-button type="primary"  @click="handleCreate">新建账户</el-button>
+                <el-button @click="handleSearch">批量删除</el-button>
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
-                    <template #default="scope">￥{{ scope.row.money }}</template>
+                <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="thumb" label="缩略图">
+                  <template #default="scope">
+                        <el-image class="table-td-thumb" :src="scope.row.thumb" @click="visible = true">
+                        </el-image>
+                    </template>
                 </el-table-column>
-                <el-table-column label="头像(查看大图)" align="center">
+                <el-table-column prop="planName" label="计划名称"></el-table-column>
+                <el-table-column prop="planState" label="计划状态">
+                  <template #default="scope">
+                        <el-tag :type="
+                                scope.row.planState === '待发布'
+                                    ? 'wait'
+                                    : scope.row.planState === '发布中'
+                                    ? 'public'
+                                    : ''
+                            ">{{ scope.row.planState }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="playMode" label="播放模式"></el-table-column>
+                <el-table-column prop="playDate" label="播放日期"></el-table-column>
+                <el-table-column prop="author" label="作者"></el-table-column>
+                <el-table-column prop="checker" label="审核人"></el-table-column>
+                <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
                         </el-image>
                     </template>
-                </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column label="状态" align="center">
+                </el-table-column> -->
+                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                <!-- <el-table-column label="状态" align="center">
                     <template #default="scope">
                         <el-tag :type="
                                 scope.row.state === '成功'
@@ -39,15 +67,23 @@
                                     : ''
                             ">{{ scope.row.state }}</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
 
-                <el-table-column prop="date" label="注册时间"></el-table-column>
+                <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
+                      <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">详情
                         </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
+                      <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">修改
+                        </el-button>
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">复制
+                        </el-button>
+                        <el-button type="text"  class="red"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">加密下载
+                        </el-button>
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">发布
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -60,11 +96,40 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" v-model="editVisible" width="30%">
             <el-form label-width="70px">
-                <el-form-item label="用户名">
+                <el-form-item label="账户名">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
+                <el-form-item label="密码">
+                    <el-input
+                      v-model="form.password"
+                      type="password"
+                      placeholder="Please input password"
+                      show-password
+                    />
+                </el-form-item>
+                <el-form-item label="所属机构">
+                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属角色">
+                    <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="账号状态">
+                    <el-select v-model="form.state" placeholder="账号状态" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="真实姓名">
+                    <el-input v-model="form.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="form.mail"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input v-model="form.phoneNumber"></el-input>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -74,6 +139,66 @@
                 </span>
             </template>
         </el-dialog>
+
+        <!-- 新建弹出框 -->
+         <!-- <el-dialog title="新建账户" v-model="createVisible" width="30%">
+            <el-form label-width="70px">
+                <el-form-item label="账户名">
+                    <el-input v-model="form.name"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input
+                      v-model="form.password"
+                      type="password"
+                      placeholder="Please input password"
+                      show-password
+                    />
+                </el-form-item>
+                <el-form-item label="所属机构">
+                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属角色">
+                    <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="账号状态">
+                    <el-select v-model="form.state" placeholder="账号状态" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="真实姓名">
+                    <el-input v-model="form.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="form.mail"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input v-model="form.phoneNumber"></el-input>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="createVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="saveEdit">确 定</el-button>
+                </span>
+            </template>
+        </el-dialog> -->
+        <!-- 节目详情 -->
+        <el-dialog v-model="visible" :show-close="false">
+    <template #default="scope">
+      <div class="my-header">
+        <el-tabs type="border-card">
+          <el-tab-pane label="planInfo">计划详情</el-tab-pane>
+          <el-tab-pane label="devInfo">设备详情</el-tab-pane>
+        </el-tabs>
+        
+        <el-button type="primary">返回</el-button>
+      </div>
+    </template>
+  </el-dialog>
     </div>
 </template>
 
@@ -81,23 +206,36 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { fetchData } from "../api/index";
-
 export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            address: "",
-            name: "",
-            pageIndex: 1,
-            pageSize: 10,
+            // address: "",
+            // name: "",
+            // pageIndex: 1,
+            // pageSize: 10,
+
+            
         });
-        const tableData = ref([]);
+        const tableData = ref([
+          {
+            thumb:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+            planName:"1324564",
+            planState:"待发布",
+            playMode:"按时段播放",
+            playDate:"2022-06-29",
+            author:"jx",
+            checker:"jiejie",
+            updateTime:"boom"
+          }
+        ]);
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
             fetchData(query).then((res) => {
-                tableData.value = res.list;
-                pageTotal.value = res.pageTotal || 50;
+                console.log(res.data)
+                // tableData.value = res.list;
+                // pageTotal.value = res.pageTotal || 50;
             });
         };
         getData();
@@ -128,9 +266,20 @@ export default {
 
         // 表格编辑时弹窗和保存
         const editVisible = ref(false);
+        //新建账户弹窗和保存
+        const createVisible = ref(false);
+        //节目详情
+        const visible = ref(false)
         let form = reactive({
             name: "",
-            address: "",
+            password:"dadasdasda",
+            organization:"",
+            role:"",
+            state:"",
+            realName:"",
+            phoneNumber:"",
+            mail:"",
+
         });
         let idx = -1;
         const handleEdit = (index, row) => {
@@ -139,6 +288,11 @@ export default {
                 form[item] = row[item];
             });
             editVisible.value = true;
+        };
+        const handleCreate = () => {
+           
+            createVisible.value = true;
+            console.log(createVisible.value)
         };
         const saveEdit = () => {
             editVisible.value = false;
@@ -153,12 +307,15 @@ export default {
             tableData,
             pageTotal,
             editVisible,
+            createVisible,
             form,
+            visible,
             handleSearch,
             handlePageChange,
             handleDelete,
             handleEdit,
             saveEdit,
+            handleCreate
         };
     },
 };
@@ -170,11 +327,11 @@ export default {
 }
 
 .handle-select {
-    width: 120px;
+    width: 130px;
 }
 
 .handle-input {
-    width: 300px;
+    width: 130px;
     display: inline-block;
 }
 .table {
