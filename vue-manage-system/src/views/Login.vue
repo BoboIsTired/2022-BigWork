@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips"></p>
             </el-form>
         </div>
     </div>
@@ -37,8 +37,8 @@ export default {
     setup() {
         const router = useRouter();
         const param = reactive({
-            username: "admin",
-            password: "123123",
+            username: "",
+            password: "",
         });
 
         const rules = {
@@ -55,13 +55,14 @@ export default {
         };
         const login = ref(null);
         const submitForm = () => {
+            
             login.value.validate((valid) => {
                 if (valid) {
                     ElMessage.success("登录成功");
                     localStorage.setItem("ms_username", param.username);
                     router.push("/");
                 } else {
-                    ElMessage.error("登录成功");
+                    ElMessage.error("登录失败");
                     return false;
                 }
             });

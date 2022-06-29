@@ -8,3 +8,12 @@ export const fetchData = query => {
         params: query
     });
 };
+
+export const login = query => {
+    return request({
+
+        url: '/admin/login',
+        method: 'post',
+        params: params
+    });
+};
