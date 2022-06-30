@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips"></p>
             </el-form>
         </div>
     </div>
@@ -32,13 +32,13 @@ import { ref, reactive } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-
+import axios from 'axios';
 export default {
     setup() {
         const router = useRouter();
         const param = reactive({
-            username: "admin",
-            password: "123123",
+            username: "",
+            password: "",
         });
 
         const rules = {
@@ -55,13 +55,34 @@ export default {
         };
         const login = ref(null);
         const submitForm = () => {
+            // if (param.username == "" || param.password == "") {
+            //     ElMessage.error("账号或密码不能为空");
+            // } else {
+            //     // console.log(state);
+            //     axios
+            //         .post("/admin/login", {
+            //             accountName: param.username,
+            //             password: param.password,
+            //         })
+            //         .then((res) => {
+            //             console.log(res.data);
+            //             if (res.data.msg === "成功") {
+            //                 ElMessage.success("登录成功");
+            //                 localStorage.setItem("ms_username", param.username);
+            //                 router.push("/");
+            //                 // console.log("登录成功！！");
+            //             } else {
+            //                 ElMessage.error("账号或密码错误！！");
+            //             }
+            //         });
+            // }
             login.value.validate((valid) => {
                 if (valid) {
                     ElMessage.success("登录成功");
                     localStorage.setItem("ms_username", param.username);
                     router.push("/");
                 } else {
-                    ElMessage.error("登录成功");
+                    ElMessage.error("登录失败");
                     return false;
                 }
             });
@@ -88,6 +109,7 @@ export default {
     background-image: url(../assets/img/login-bg.jpg);
     background-size: 100%;
 }
+
 .ms-title {
     width: 100%;
     line-height: 50px;
@@ -96,6 +118,7 @@ export default {
     color: #fff;
     border-bottom: 1px solid #ddd;
 }
+
 .ms-login {
     position: absolute;
     left: 50%;
@@ -106,17 +129,21 @@ export default {
     background: rgba(255, 255, 255, 0.3);
     overflow: hidden;
 }
+
 .ms-content {
     padding: 30px 30px;
 }
+
 .login-btn {
     text-align: center;
 }
+
 .login-btn button {
     width: 100%;
     height: 36px;
     margin-bottom: 10px;
 }
+
 .login-tips {
     font-size: 12px;
     line-height: 30px;
