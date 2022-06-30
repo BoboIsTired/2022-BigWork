@@ -8,6 +8,8 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+
 import com.example.demo.entity.Material;
 //import lombok.Value;
 import com.example.demo.mapper.MaterialMapper;
@@ -52,22 +54,27 @@ public class MaterialController {
         upload.setSize(file.getSize());
         //存储到本地
         File uploadParentFile = new File(fileUploadPath);
-        //判断配置文件是否存在，若不存在，新建文件目录
+            //判断配置文件是否存在，若不存在，新建文件目录
         if(!uploadParentFile.exists()){
             uploadParentFile.mkdirs();
         }
-        //定义文件唯一的标识
+            //定义文件唯一的标识
         String uuid = IdUtil.fastSimpleUUID();
         File uploadFile = new File(fileUploadPath+uuid + StrUtil.DOT + upload.getType());
-        //获取文件的md5
+            //获取文件的md5
         upload.setMd5(SecureUtil.md5(uploadFile));
-        QueryWrapper<Material> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("md5",upload.getMd5());
-//            Material material = MaterialMapper.selectOne(queryWrapper);
 
-        //把文件存储到磁盘目录
+//        QueryWrapper<Material> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("md5",upload.getMd5());
+//        Material material = MaterialMapper.selectOne(queryWrapper);
+
+        Material material = materialMapper.selectOne(Wrappers.<Material>lambdaQuery().eq(Material::getMd5,upload.getMd5()));//去表里查询
+        if(material != null){
+            return "文件重复!";
+        }
+            //把文件存储到磁盘目录
         file.transferTo(uploadFile);
-        //存储数据库
+            //存储数据库
         upload.setCreateDate(LocalDateTime.now());
 //        String url = "http://localhost:3000/material/"+uuid;
         String url = uuid + StrUtil.DOT + upload.getType();

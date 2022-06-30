@@ -12,6 +12,7 @@ import com.example.demo.mapper.AdminMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * <p>
@@ -75,7 +76,7 @@ public class AdminController {
         if(res == null){
             return Result.error("-1","用户名密码错误！");
         }
-        else if(res.getEnable()==0){
+        else if(Objects.equals(res.getEnable(), "禁用")){
             return Result.error("-1","该用户已被禁用!");
         }
         return Result.success(res);
