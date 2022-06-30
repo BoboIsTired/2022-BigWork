@@ -188,17 +188,21 @@
         </el-dialog> -->
         <!-- 节目详情 -->
         <el-dialog v-model="visible" :show-close="false">
-    <template #default="scope">
-      <div class="my-header">
-        <el-tabs type="border-card">
-          <el-tab-pane label="planInfo">计划详情</el-tab-pane>
-          <el-tab-pane label="devInfo">设备详情</el-tab-pane>
-        </el-tabs>
-        
-        <el-button type="primary">返回</el-button>
-      </div>
-    </template>
-  </el-dialog>
+          <template #default="scope">
+            <div class="my-header">
+              <el-tabs type="border-card">
+                <el-tab-pane label="planInfo" >
+                  <div class="detail">
+                    <span>计划名称：{{form}}</span> 
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="devInfo">设备详情</el-tab-pane>
+              </el-tabs>
+              
+              <el-button type="primary">返回</el-button>
+            </div>
+          </template>
+        </el-dialog>
     </div>
 </template>
 
