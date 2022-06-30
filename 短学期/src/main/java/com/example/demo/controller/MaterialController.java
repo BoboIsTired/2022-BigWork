@@ -98,11 +98,19 @@ public class MaterialController {
         return upload.getUrl();
     }
 
-    //下载
+//    下载
     @GetMapping("/{url}")
     public void download(@PathVariable String url, HttpServletResponse response) throws IOException{
+        //获取项目classes/static的地址
+        String staticPath = ResourceUtils.getURL("classpath:").getPath() + "static";
+        staticPath = java.net.URLDecoder.decode(staticPath, "utf-8");
         //根据文件标识获取文件
-        File uploadFile = new File(fileUploadPath + url);
+//        File uploadFile = new File(fileUploadPath + url);
+        // 图片存储目录及图片名称
+        String url_path = "imgs" + File.separator + url;
+        String savePath = staticPath + File.separator + url_path;
+        //获取文件
+        File uploadFile = new File(savePath);
         //设置输出流格式
         ServletOutputStream os = response.getOutputStream();
 //        String ss = URLEncoder.encode(url, "utf-8");
