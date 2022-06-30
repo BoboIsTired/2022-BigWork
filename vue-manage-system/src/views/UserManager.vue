@@ -50,7 +50,7 @@
                 <el-table-column prop="realName" label="真实姓名"></el-table-column>
                 <el-table-column prop="phone" label="手机号"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
-               
+                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                 <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
@@ -195,7 +195,7 @@ export default {
             enableText:"已启用",
             realName:"ajie",
             phone:1888888888,
-            email:"xfs@qq.com",
+            mail:"xfs@qq.com",
           }
         ]);
         const pageTotal = ref(0);
