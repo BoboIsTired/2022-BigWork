@@ -293,18 +293,21 @@ export default {
             editVisible.value = true;
         };
         const handleState = (index, row) => {
-            // console.log(row)
-            // data.state = !data.state
+            console.log(row)
             if (row.enable == "启用") {
-                // data.stateText = "停用"
                 row.enable = "停用"
-                ElMessage.success(`状态修改成功`);
+                userEdit(row).then((res) => {
+                    ElMessage.success(`状态修改成功`);
+                    getData();
+                });
+                
             }
             else {
-                // data.stateText = "启用"
                 row.enable = "启用"
-
-                ElMessage.success(`状态修改成功`);
+                userEdit(row).then((res) => {
+                    ElMessage.success(`状态修改成功`);
+                    getData();
+                });
             }
         }
         const handleCreate = () => {

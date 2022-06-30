@@ -58,7 +58,6 @@ export default {
             // if (param.username == "" || param.password == "") {
             //     ElMessage.error("账号或密码不能为空");
             // } else {
-            //     // console.log(state);
             //     axios
             //         .post("/admin/login", {
             //             accountName: param.username,
@@ -66,13 +65,17 @@ export default {
             //         })
             //         .then((res) => {
             //             console.log(res.data);
-            //             if (res.data.msg === "成功") {
-            //                 ElMessage.success("登录成功");
-            //                 localStorage.setItem("ms_username", param.username);
-            //                 router.push("/");
-            //                 // console.log("登录成功！！");
-            //             } else {
+            //             if (res.data.code === "-1") {
             //                 ElMessage.error("账号或密码错误！！");
+            //             } else {
+            //                 if (res.data.data.enable === "停用") {
+            //                     ElMessage.error("该账号已被停用！")
+            //                 } else {
+            //                     ElMessage.success("登录成功");
+            //                     localStorage.setItem("ms_username", param.username);
+            //                     router.push("/");
+            //                 }
+
             //             }
             //         });
             // }
