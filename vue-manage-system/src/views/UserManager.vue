@@ -51,6 +51,8 @@
                 <el-table-column prop="phone" label="手机号"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
 
+
+
                 <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
@@ -179,6 +181,7 @@ export default {
         const query = reactive({
 
         });
+
         const tableData = ref([
             {
                 accountName: "jiejie",
@@ -190,6 +193,7 @@ export default {
                 phone: 1888888888,
                 email: "xfs@qq.com",
             }
+
         ]);
         const pageTotal = ref(0);
         // 获取表格数据

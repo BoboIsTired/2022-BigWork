@@ -22,7 +22,7 @@
                
                 <el-button @click="handleSearch">重置</el-button>
                 <el-button type="primary"  @click="handleSearch">搜索</el-button>
-                <el-button type="primary"  @click="handleCreate">新建账户</el-button>
+                <el-button type="primary"  @click="$router.push('/planadd')">新建账户</el-button>
                 <el-button @click="handleSearch">批量删除</el-button>
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
@@ -30,7 +30,7 @@
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="thumb" label="缩略图">
                   <template #default="scope">
-                        <el-image class="table-td-thumb" :src="scope.row.thumb" @click="visible = true">
+                        <el-image class="table-td-thumb" :src="scope.row.thumb" @click="handleImg(scope.$index, scope.row)">
                         </el-image>
                     </template>
                 </el-table-column>
@@ -39,9 +39,9 @@
                   <template #default="scope">
                         <el-tag :type="
                                 scope.row.planState === '待发布'
-                                    ? 'wait'
+                                    ? 'success'
                                     : scope.row.planState === '发布中'
-                                    ? 'public'
+                                    ? 'danger'
                                     : ''
                             ">{{ scope.row.planState }}</el-tag>
                     </template>
@@ -72,7 +72,7 @@
                 <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                      <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">详情
+                      <el-button type="text"  @click="handleImg(scope.$index, scope.row)">详情
                         </el-button>
                       <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">修改
                         </el-button>
@@ -187,19 +187,44 @@
             </template>
         </el-dialog> -->
         <!-- 节目详情 -->
-        <el-dialog v-model="visible" :show-close="false">
+        <el-dialog :data="tableData" v-model="visible" :show-close="false">
           <template #default="scope">
             <div class="my-header">
               <el-tabs type="border-card">
-                <el-tab-pane label="planInfo" >
+                <el-tab-pane label="计划详情" >
                   <div class="detail">
-                    <span>计划名称：{{form}}</span> 
+                    <!-- <span>计划名称：{{form.planName}}</span>  -->
+                    <el-row>
+                      <el-col :span="12">计划名称：{{form.planName}}</el-col>
+                      <el-col :span="12">播放日期：{{form.playDate}}</el-col>
+                      <el-col :span="12">播放模式：{{form.playMode}}</el-col>
+                      <el-col :span="12">播放策略：{{form.playTactics}}</el-col>
+                      <el-col :span="12">多屏同步：{{form.synchronous}}</el-col>
+                      <el-col :span="12">发布状态：{{form.planState}}</el-col>
+                      <el-col :span="24">创建时间：{{form.updateTime}}</el-col>
+                      <el-col :span="12">循环类型：{{form.loopType}}</el-col>
+                      <el-col :span="12">循环时间段：{{form.loopTime}}</el-col>
+                    </el-row>
+                  </div>
+                  <div class="progrom">
+                    <span>已选节目：</span>
+                    <div class="pgInfo">
+                    
+                        <el-image class="table-td-thumb" :src="form.thumb"  :preview-src-list="form.thumb">
+                        </el-image>
+                   
+                    </div>
+                  </div>
+                  <div class="result">
+                    <span>原因：</span>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="devInfo">设备详情</el-tab-pane>
+                <el-tab-pane label="设备详情">设备详情</el-tab-pane>
               </el-tabs>
+              <div class="backBtn">
+                <el-button  type="primary" @click="visible=false">返回</el-button>
+              </div>
               
-              <el-button type="primary">返回</el-button>
             </div>
           </template>
         </el-dialog>
@@ -221,13 +246,14 @@ export default {
 
             
         });
-        const tableData = ref([
+        const tableData = reactive([
           {
-            thumb:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+            thumb:["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
             planName:"1324564",
             planState:"待发布",
             playMode:"按时段播放",
             playDate:"2022-06-29",
+            playTactics:"替换",
             author:"jx",
             checker:"jiejie",
             updateTime:"boom"
@@ -275,16 +301,26 @@ export default {
         //节目详情
         const visible = ref(false)
         let form = reactive({
-            name: "",
-            password:"dadasdasda",
-            organization:"",
-            role:"",
-            state:"",
-            realName:"",
-            phoneNumber:"",
-            mail:"",
+             thumb:[""],
+            planName:"",
+            planState:"",
+            playMode:"",
+            playDate:"",
+            playTactics:"sfsf",
+            synchronous:"",
+            loopType:"",
+            loopTime:"",
+            author:"",
+            checker:"",
+            updateTime:""
 
         });
+        const handleImg = (index,row) =>{
+          Object.keys(form).forEach((item) => {
+                form[item] = row[item];
+            });
+          visible.value = true
+        }
         let idx = -1;
         const handleEdit = (index, row) => {
             idx = index;
@@ -318,6 +354,7 @@ export default {
             handlePageChange,
             handleDelete,
             handleEdit,
+            handleImg,
             saveEdit,
             handleCreate
         };
@@ -326,6 +363,17 @@ export default {
 </script>
 
 <style scoped>
+
+.pgInfo {
+margin-left: 70px; 
+margin-top: -13px;
+height: 150px;
+border: 1px solid black;
+}
+.backBtn {
+  margin-top: 10px;
+  margin-left: 700px;
+}
 .handle-box {
     margin-bottom: 20px;
 }
@@ -350,8 +398,11 @@ export default {
 }
 .table-td-thumb {
     display: block;
-    margin: auto;
-    width: 40px;
-    height: 40px;
+    
+    /* margin: auto; */
+     margin: 30px 0 0 30px;
+    padding: 5px;
+    width: 60px;
+    height: 60px;
 }
 </style>
