@@ -44,5 +44,4 @@ public class Material implements Serializable {
 
     private String md5;
 
-
 }
