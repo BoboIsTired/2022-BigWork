@@ -150,12 +150,12 @@
                 </el-form-item>
                 <el-form-item label="所属机构">
                     <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                        <el-option key="1" label="城院测试" value="城院测试"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="所属角色">
                     <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                        <el-option key="1" label="啵啵" value="啵啵"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="账号状态">
@@ -248,7 +248,7 @@ export default {
         const createVisible = ref(false);
         let form = reactive({
             name: "",
-            password:"dadasdasda",
+            password:"123456",
             organization:"",
             role:"",
             state:"",
