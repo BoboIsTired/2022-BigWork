@@ -41,6 +41,7 @@ public class Material implements Serializable {
     private long isDelete;
 
     private LocalDateTime createDate;
+    private String md5;
 
 
 }
