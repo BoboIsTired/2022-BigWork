@@ -42,5 +42,7 @@ public class Material implements Serializable {
 
     private LocalDateTime createDate;
 
+    private String md5;
+
 
 }
