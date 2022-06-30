@@ -10,25 +10,25 @@
         <div class="container">
             <div class="handle-box">
                 <!-- <div class="query"> -->
-                  <span>账户名：</span>
-                  <el-input v-model="query.name" size="small" placeholder="请输入账户名称" class="handle-input mr10"></el-input>
+                <span>账户名：</span>
+                <el-input v-model="query.name" size="small" placeholder="请输入账户名称" class="handle-input mr10"></el-input>
                 <!-- </div> -->
                 <!-- <el-input v-model="query.name" placeholder="请输入账户名称" class="handle-input mr10"></el-input> -->
-                 <span>所属机构：</span>
-                 <el-select v-model="query.address" placeholder="所属机构" class="handle-select mr10">
+                <span>所属机构：</span>
+                <el-select v-model="query.address" placeholder="所属机构" class="handle-select mr10">
                     <el-option key="1" label="广东省" value="广东省"></el-option>
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
                 </el-select>
                 <span>状态：</span>
-                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10" >
+                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="广东省" value="广东省"></el-option>
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
                 </el-select>
                 <span>所属角色: </span>
                 <el-input v-model="query.name" placeholder="请选择所属角色" class="handle-input mr10"></el-input>
                 <el-button @click="handleSearch">重置</el-button>
-                <el-button type="primary"  @click="handleSearch">搜索</el-button>
-                <el-button type="primary"  @click="handleCreate">新建账户</el-button>
+                <el-button type="primary" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" @click="handleCreate">新建账户</el-button>
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
                 <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
@@ -36,37 +36,38 @@
                 <el-table-column prop="mechanism" label="所属机构"></el-table-column>
                 <el-table-column prop="role" label="所属角色"></el-table-column>
                 <el-table-column prop="enable" label="状态">
-                  <template #default="scope">
-                        <el-tag :type="
-                                scope.row.enable === '1'
-                                    ? 'success'
-                                    : scope.row.enable === '0'
+                    <template #default="scope" >
+                        <el-tag @click="handleState(scope.$index, scope.row)" :type="
+                            scope.row.enable === '启用'
+                                ? 'success'
+                                : scope.row.enable === '停用'
                                     ? 'danger'
                                     : ''
-                            ">{{ scope.row.enableText }}</el-tag>
-                            
+                        ">{{ scope.row.enable }}</el-tag>
+
                     </template>
                 </el-table-column>
                 <el-table-column prop="realName" label="真实姓名"></el-table-column>
                 <el-table-column prop="phone" label="手机号"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+
+
+
                 <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
                         </el-image>
                     </template>
                 </el-table-column> -->
-                
+
                 <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                      <el-button type="text"  @click="handleState(scope.$index, scope.row)">{{data.stateText}}
+                        <!-- <el-button type="text" @click="handleState(scope.$index, scope.row)">{{ scope.row.enable }}
+                        </el-button> -->
+                        <el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑
                         </el-button>
-                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button type="text"  class="red"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button type="text" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -83,12 +84,8 @@
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input
-                      v-model="form.password"
-                      type="password"
-                      placeholder="Please input password"
-                      show-password
-                    />
+                    <el-input v-model="form.password" type="password" placeholder="Please input password"
+                        show-password />
                 </el-form-item>
                 <el-form-item label="所属机构">
                     <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
@@ -124,27 +121,23 @@
         </el-dialog>
 
         <!-- 新建弹出框 -->
-         <el-dialog title="新建账户" v-model="createVisible" width="30%">
+        <el-dialog title="新建账户" v-model="createVisible" width="30%">
             <el-form label-width="70px">
                 <el-form-item label="账户名">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input
-                      v-model="form.password"
-                      type="password"
-                      placeholder="Please input password"
-                      show-password
-                    />
+                    <el-input v-model="form.password" type="password" placeholder="Please input password"
+                        show-password />
                 </el-form-item>
                 <el-form-item label="所属机构">
                     <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                        <el-option key="1" label="城院测试" value="城院测试"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="所属角色">
                     <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                        <el-option key="1" label="啵啵" value="啵啵"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="账号状态">
@@ -179,32 +172,37 @@ import { fetchData } from "../api/index";
 export default {
     name: "basetable",
     setup() {
-      const data = reactive({
-        state:true,
-        stateText:"停用"
-      })
+        // const data = reactive(
+        //     {
+        //         state: true,
+        //         stateText: ""
+
+        //     })
         const query = reactive({
-            
+
         });
-        const tableData = reactive([
-          {
-            accountName:"jiejie",
-            mechanism:"zucc",
-            role:"me",
-            enable:"1",
-            enableText:"已启用",
-            realName:"ajie",
-            phone:1888888888,
-            mail:"xfs@qq.com",
-          }
+
+        const tableData = ref([
+            {
+                accountName: "jiejie",
+                mechanism: "zucc",
+                role: "me",
+                enable: "1",
+                enableText: "已启用",
+                realName: "ajie",
+                phone: 1888888888,
+                email: "xfs@qq.com",
+            }
+
         ]);
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
             fetchData(query).then((res) => {
-                var list=res.data
-                console.log(list)
+                var list = res.data
+                // console.log(list.records)
                 tableData.value = list.records;
+
                 // pageTotal.value = res.pageTotal || 50;
             });
         };
@@ -231,7 +229,7 @@ export default {
                     ElMessage.success("删除成功");
                     tableData.value.splice(index, 1);
                 })
-                .catch(() => {});
+                .catch(() => { });
         };
 
         // 表格编辑时弹窗和保存
@@ -240,13 +238,13 @@ export default {
         const createVisible = ref(false);
         let form = reactive({
             name: "",
-            password:"dadasdasda",
-            organization:"",
-            role:"",
-            state:"",
-            realName:"",
-            phoneNumber:"",
-            mail:"",
+            password: "123456",
+            organization: "",
+            role: "",
+            state: "",
+            realName: "",
+            phoneNumber: "",
+            mail: "",
 
         });
         let idx = -1;
@@ -257,25 +255,23 @@ export default {
             });
             editVisible.value = true;
         };
-        const handleState = (index, row) =>{
-          console.log(row)
-            data.state = !data.state
-            if(data.state){
-              data.stateText = "停用"
-              row.enable = "1"
-              row.enableText = "已启用"
-              console.log(tableData)
+        const handleState = (index, row) => {
+            console.log(row)
+            // data.state = !data.state
+            if (row.enable=="启用") {
+                // data.stateText = "停用"
+                row.enable = "停用"
+                console.log(tableData)
             }
             else {
-              data.stateText = "启用"
-              row.enable = "0"
-              row.enableText = "已停用"
-              
-               console.log(tableData)
+                // data.stateText = "启用"
+                row.enable = "启用"
+
+                console.log(tableData)
             }
         }
         const handleCreate = () => {
-           
+
             createVisible.value = true;
             console.log(createVisible.value)
         };
@@ -288,7 +284,7 @@ export default {
         };
 
         return {
-            data,
+            // data,
             query,
             tableData,
             pageTotal,
@@ -320,16 +316,20 @@ export default {
     width: 130px;
     display: inline-block;
 }
+
 .table {
     width: 100%;
     font-size: 14px;
 }
+
 .red {
     color: #ff0000;
 }
+
 .mr10 {
     margin-right: 10px;
 }
+
 .table-td-thumb {
     display: block;
     margin: auto;
