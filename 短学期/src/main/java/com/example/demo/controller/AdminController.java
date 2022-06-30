@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
 import com.example.demo.common.Result;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.Login;
@@ -16,7 +15,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  前端控制器
+ *  admin
  * </p>
  *
  * @author anonymous
