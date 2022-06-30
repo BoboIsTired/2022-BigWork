@@ -6,6 +6,7 @@ export const fetchData = query => {
         url: '/admin',
         method: 'get',
         params: query
+        
     });
 };
 
