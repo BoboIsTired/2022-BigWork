@@ -55,37 +55,37 @@ export default {
         };
         const login = ref(null);
         const submitForm = () => {
-            if (param.username == "" || param.password == "") {
-                ElMessage.error("账号或密码不能为空");
-            } else {
-                // console.log(state);
-                axios
-                    .post("/admin/login", {
-                        accountName: param.username,
-                        password: param.password,
-                    })
-                    .then((res) => {
-                        console.log(res.data);
-                        if (res.data.msg === "成功") {
-                            ElMessage.success("登录成功");
-                            localStorage.setItem("ms_username", param.username);
-                            router.push("/");
-                            // console.log("登录成功！！");
-                        } else {
-                            ElMessage.error("账号或密码错误！！");
-                        }
-                    });
-            }
-            // login.value.validate((valid) => {
-            //     if (valid) {
-            //         ElMessage.success("登录成功");
-            //         localStorage.setItem("ms_username", param.username);
-            //         router.push("/");
-            //     } else {
-            //         ElMessage.error("登录失败");
-            //         return false;
-            //     }
-            // });
+            // if (param.username == "" || param.password == "") {
+            //     ElMessage.error("账号或密码不能为空");
+            // } else {
+            //     // console.log(state);
+            //     axios
+            //         .post("/admin/login", {
+            //             accountName: param.username,
+            //             password: param.password,
+            //         })
+            //         .then((res) => {
+            //             console.log(res.data);
+            //             if (res.data.msg === "成功") {
+            //                 ElMessage.success("登录成功");
+            //                 localStorage.setItem("ms_username", param.username);
+            //                 router.push("/");
+            //                 // console.log("登录成功！！");
+            //             } else {
+            //                 ElMessage.error("账号或密码错误！！");
+            //             }
+            //         });
+            // }
+            login.value.validate((valid) => {
+                if (valid) {
+                    ElMessage.success("登录成功");
+                    localStorage.setItem("ms_username", param.username);
+                    router.push("/");
+                } else {
+                    ElMessage.error("登录失败");
+                    return false;
+                }
+            });
         };
 
         const store = useStore();
