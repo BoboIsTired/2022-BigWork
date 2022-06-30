@@ -43,40 +43,29 @@
                                     : scope.row.enable === '0'
                                     ? 'danger'
                                     : ''
-                            ">{{ scope.row.enable }}</el-tag>
+                            ">{{ scope.row.enableText }}</el-tag>
+                            
                     </template>
                 </el-table-column>
                 <el-table-column prop="realName" label="真实姓名"></el-table-column>
                 <el-table-column prop="phone" label="手机号"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+               
                 <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
                         </el-image>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="userType" label="用户类型"></el-table-column>
-                <!-- <el-table-column label="状态" align="center">
-                    <template #default="scope">
-                        <el-tag :type="
-                                scope.row.state === '成功'
-                                    ? 'success'
-                                    : scope.row.state === '失败'
-                                    ? 'danger'
-                                    : ''
-                            ">{{ scope.row.state }}</el-tag>
-                    </template>
-                </el-table-column> -->
-
+                
                 <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                      <el-button type="text" icon="el-icon-stop" @click="handleEdit(scope.$index, scope.row)">停用
+                      <el-button type="text"  @click="handleState(scope.$index, scope.row)">{{data.stateText}}
                         </el-button>
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">编辑
                         </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
+                        <el-button type="text"  class="red"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -190,20 +179,23 @@ import { fetchData } from "../api/index";
 export default {
     name: "basetable",
     setup() {
+      const data = reactive({
+        state:true,
+        stateText:"停用"
+      })
         const query = reactive({
             
         });
-        const tableData = ref([
+        const tableData = reactive([
           {
-            name:"jiejie",
-            organization:"zucc",
+            accountName:"jiejie",
+            mechanism:"zucc",
             role:"me",
-            state:"已启用",
+            enable:"1",
+            enableText:"已启用",
             realName:"ajie",
             phone:1888888888,
-            mail:"xfs@qq.com",
-            updateTime:"4564",
-            userType:"adas"
+            email:"xfs@qq.com",
           }
         ]);
         const pageTotal = ref(0);
@@ -265,6 +257,23 @@ export default {
             });
             editVisible.value = true;
         };
+        const handleState = (index, row) =>{
+          console.log(row)
+            data.state = !data.state
+            if(data.state){
+              data.stateText = "停用"
+              row.enable = "1"
+              row.enableText = "已启用"
+              console.log(tableData)
+            }
+            else {
+              data.stateText = "启用"
+              row.enable = "0"
+              row.enableText = "已停用"
+              
+               console.log(tableData)
+            }
+        }
         const handleCreate = () => {
            
             createVisible.value = true;
@@ -279,6 +288,7 @@ export default {
         };
 
         return {
+            data,
             query,
             tableData,
             pageTotal,
@@ -290,7 +300,8 @@ export default {
             handleDelete,
             handleEdit,
             saveEdit,
-            handleCreate
+            handleCreate,
+            handleState
         };
     },
 };
