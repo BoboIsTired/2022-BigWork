@@ -11,22 +11,24 @@
             <div class="handle-box">
                 <!-- <div class="query"> -->
                 <span>账户名：</span>
-                <el-input v-model="query.name" size="small" placeholder="请输入账户名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.accountName" size="small" placeholder="请输入账户名称" class="handle-input mr10">
+                </el-input>
                 <!-- </div> -->
                 <!-- <el-input v-model="query.name" placeholder="请输入账户名称" class="handle-input mr10"></el-input> -->
                 <span>所属机构：</span>
-                <el-select v-model="query.address" placeholder="所属机构" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="query.mechanism" placeholder="所属机构" class="handle-select mr10">
+                    <el-option key="1" label="城院测试" value="城院测试"></el-option>
                 </el-select>
                 <span>状态：</span>
-                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="query.enable" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="启用" value="启用"></el-option>
+                    <el-option key="2" label="停用" value="停用"></el-option>
                 </el-select>
                 <span>所属角色: </span>
-                <el-input v-model="query.name" placeholder="请选择所属角色" class="handle-input mr10"></el-input>
-                <el-button @click="handleSearch">重置</el-button>
+                <el-select v-model="query.role" placeholder="请选择所属角色" class="handle-select mr10">
+                    <el-option key="1" label="啵啵" value="啵啵"></el-option>
+                </el-select>
+                <el-button @click="handleClean">重置</el-button>
                 <el-button type="primary" @click="handleSearch">搜索</el-button>
                 <el-button type="primary" @click="handleCreate">新建账户</el-button>
             </div>
@@ -36,7 +38,7 @@
                 <el-table-column prop="mechanism" label="所属机构"></el-table-column>
                 <el-table-column prop="role" label="所属角色"></el-table-column>
                 <el-table-column prop="enable" label="状态">
-                    <template #default="scope" >
+                    <template #default="scope">
                         <el-tag @click="handleState(scope.$index, scope.row)" :type="
                             scope.row.enable === '启用'
                                 ? 'success'
@@ -61,7 +63,7 @@
                 <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                        <!-- <el-button type="text" @click="handleState(scope.$index, scope.row)">{{ scope.row.enable }}
+                        <!-- <el-button type="text" @click="handleState(scope.$index, scope.row)">{{ scope.row.id }}
                         </el-button> -->
                         <el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑
                         </el-button>
@@ -79,57 +81,14 @@
         <el-dialog title="编辑" v-model="editVisible" width="30%">
             <el-form label-width="70px">
                 <el-form-item label="账户名">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.accountName"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
                     <el-input v-model="form.password" type="password" placeholder="Please input password"
                         show-password />
                 </el-form-item>
                 <el-form-item label="所属机构">
-                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="所属角色">
-                    <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="账号状态">
-                    <el-select v-model="form.state" placeholder="账号状态" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="真实姓名">
-                    <el-input v-model="form.realName"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱">
-                    <el-input v-model="form.mail"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号">
-                    <el-input v-model="form.phoneNumber"></el-input>
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="editVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="saveEdit">确 定</el-button>
-                </span>
-            </template>
-        </el-dialog>
-
-        <!-- 新建弹出框 -->
-        <el-dialog title="新建账户" v-model="createVisible" width="30%">
-            <el-form label-width="70px">
-                <el-form-item label="账户名">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.password" type="password" placeholder="Please input password"
-                        show-password />
-                </el-form-item>
-                <el-form-item label="所属机构">
-                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
+                    <el-select v-model="form.mechanism" placeholder="所属机构" class="handle-select mr10">
                         <el-option key="1" label="城院测试" value="城院测试"></el-option>
                     </el-select>
                 </el-form-item>
@@ -138,25 +97,69 @@
                         <el-option key="1" label="啵啵" value="啵啵"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="账号状态">
-                    <el-select v-model="form.state" placeholder="账号状态" class="handle-select mr10">
+                <!-- <el-form-item label="账号状态">
+                    <el-select v-model="form.enable" placeholder="账号状态" class="handle-select mr10">
                         <el-option key="1" label="广东省" value="广东省"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="真实姓名">
                     <el-input v-model="form.realName"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱">
-                    <el-input v-model="form.mail"></el-input>
+                    <el-input v-model="form.email"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号">
-                    <el-input v-model="form.phoneNumber"></el-input>
+                    <el-input v-model="form.phone"></el-input>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="editVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="saveEdit(form)">确 定</el-button>
+                </span>
+            </template>
+        </el-dialog>
+
+        <!-- 新建弹出框 -->
+        <el-dialog title="新建账户" v-model="createVisible" width="30%">
+            <el-form label-width="70px">
+                <el-form-item label="账户名">
+                    <el-input v-model="New.accountName"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="New.password" type="password" placeholder="Please input password"
+                        show-password />
+                </el-form-item>
+                <el-form-item label="所属机构">
+                    <el-select v-model="New.mechanism" placeholder="所属机构" class="handle-select mr10">
+                        <el-option key="1" label="城院测试" value="城院测试"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属角色">
+                    <el-select v-model="New.role" placeholder="所属角色" class="handle-select mr10">
+                        <el-option key="1" label="啵啵" value="啵啵"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="账号状态">
+                    <el-select v-model="New.enable" placeholder="账号状态" class="handle-select mr10">
+                        <el-option key="1" label="启用" value="启用"></el-option>
+                        <el-option key="2" label="停用" value="停用"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="真实姓名">
+                    <el-input v-model="New.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="New.email"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input v-model="New.phone"></el-input>
                 </el-form-item>
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="createVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="saveEdit">确 定</el-button>
+                    <el-button type="primary" @click="saveCreate(New)">确 定</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -166,7 +169,7 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData } from "../api/index";
+import { fetchData, userAdd, userEdit } from "../api/index";
 export default {
     name: "basetable",
     setup() {
@@ -177,10 +180,17 @@ export default {
 
         //     })
         const query = reactive({
-
+            accountName: "",
+            mechanism: "",
+            role: "",
+            enable: "",
+            pageIndex: 1,
+            pageSize: 10,
+            search: "",
         });
         const tableData = ref([
             {
+                id: "",
                 accountName: "jiejie",
                 mechanism: "zucc",
                 role: "me",
@@ -194,20 +204,32 @@ export default {
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
-            fetchData(query).then((res) => {
+            fetchData().then((res) => {
                 var list = res.data
                 // console.log(list.records)
                 tableData.value = list.records;
-
-                // pageTotal.value = res.pageTotal || 50;
+                pageTotal.value = list.records.length || 50;
             });
         };
         getData();
 
         // 查询操作
-        const handleSearch = () => {
+        const handleClean = () => {
             query.pageIndex = 1;
-            getData();
+            query.accountName = "";
+            query.mechanism = "";
+            query.role = "";
+            query.enable = "";
+        };
+        const handleSearch = () => {
+            query.search = query.accountName
+            fetchData(query).then((res) => {
+                var list = res.data
+                // console.log(query)
+                tableData.value = list.records;
+                pageTotal.value = list.records.length || 50;
+            });
+            handleClean()
         };
         // 分页导航
         const handlePageChange = (val) => {
@@ -232,51 +254,86 @@ export default {
         const editVisible = ref(false);
         //新建账户弹窗和保存
         const createVisible = ref(false);
-        let form = reactive({
-            name: "",
-            password: "123456",
-            organization: "",
-            role: "",
-            state: "",
+        let New = reactive({
+            accountName: "",
+            password: "",
+            mechanism: "城院测试",
+            role: "啵啵",
+            enable: "停用",
             realName: "",
-            phoneNumber: "",
-            mail: "",
+            phone: "",
+            email: "",
 
         });
+        let form = reactive({
+            id: "",
+            accountName: "",
+            password: "",
+            mechanism: "",
+            role: "",
+            enable: "",
+            realName: "",
+            phone: "",
+            email: "",
+
+        });
+
         let idx = -1;
         const handleEdit = (index, row) => {
             idx = index;
             Object.keys(form).forEach((item) => {
+
                 form[item] = row[item];
             });
+            // console.log(form)
             editVisible.value = true;
         };
         const handleState = (index, row) => {
-            console.log(row)
+            // console.log(row)
             // data.state = !data.state
-            if (row.enable=="启用") {
+            if (row.enable == "启用") {
                 // data.stateText = "停用"
                 row.enable = "停用"
-                console.log(tableData)
+                ElMessage.success(`状态修改成功`);
             }
             else {
                 // data.stateText = "启用"
                 row.enable = "启用"
 
-                console.log(tableData)
+                ElMessage.success(`状态修改成功`);
             }
         }
         const handleCreate = () => {
-
             createVisible.value = true;
-            console.log(createVisible.value)
+
         };
-        const saveEdit = () => {
-            editVisible.value = false;
-            ElMessage.success(`修改第 ${idx + 1} 行成功`);
-            Object.keys(form).forEach((item) => {
-                tableData.value[idx][item] = form[item];
-            });
+        const saveCreate = (query) => {
+            // console.log(query)
+            if (query.accountName === '' || query.password === '' || query.realName === '' || query.phone === '' || query.email === '') {
+                ElMessage.error(`新用户详情不能为空`);
+            } else {
+                userAdd(query).then((res) => {
+                    ElMessage.success(`新用户创建成功`);
+                    createVisible.value = false;
+                    getData();
+                });
+            }
+
+        }
+        const saveEdit = (query) => {
+            console.log(query)
+            if (query.accountName === '' || query.password === '' || query.realName === '' || query.phone === '' || query.email === '') {
+                ElMessage.error(`用户详情不能修改为空`);
+            } else {
+                userEdit(query).then((res) => {
+                    editVisible.value = false;
+                    ElMessage.success(`修改第 ${idx + 1} 行成功`);
+                    getData();
+                });
+            }
+            // Object.keys(form).forEach((item) => {
+            //     tableData.value[idx][item] = form[item];
+            // });
         };
 
         return {
@@ -287,13 +344,16 @@ export default {
             editVisible,
             createVisible,
             form,
+            New,
             handleSearch,
             handlePageChange,
             handleDelete,
             handleEdit,
             saveEdit,
             handleCreate,
-            handleState
+            handleState,
+            handleClean,
+            saveCreate
         };
     },
 };
