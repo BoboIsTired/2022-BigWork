@@ -3,51 +3,88 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i>节目制作与发布/发布节目
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
+                <!-- <div class="query"> -->
+                  <span>节目名称：</span>
+                  <el-input v-model="query.name" size="small" placeholder="请输入节目名称" class="handle-input mr10"></el-input>
+                <!-- </div> -->
+                <!-- <el-input v-model="query.name" placeholder="请输入账户名称" class="handle-input mr10"></el-input> -->
+                <span>分辨率：</span>
+                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10" >
                     <el-option key="1" label="广东省" value="广东省"></el-option>
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
                 </el-select>
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <span>节目状态：</span>
+                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10" >
+                    <el-option key="1" label="广东省" value="广东省"></el-option>
+                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                </el-select>
+               
+                <el-button @click="handleSearch">重置</el-button>
+                <el-button type="primary"  @click="handleSearch">查询</el-button>
+            </div>
+            <div class="op2">
+              <div v-if="data.showPL" class="btng1">
+                <el-button type="primary"  @click="dialogVisible=true" >新建账户</el-button>
+                <el-button @click="handleSearch" style="margin-left:30px" disabled>批量发布</el-button>
+                <el-button @click="handleCreate" style="margin-left:30px" disabled>批量删除</el-button>
+              </div>
+              <div v-else class="btng2">
+                <el-button type="primary"  @click="dialogVisible=true" >新建账户</el-button>
+                <el-button type="primary" @click="handleSearch" style="margin-left:30px" >批量发布</el-button>
+                <el-button type="primary"  @click="handleCreate" style="margin-left:30px" >批量删除</el-button>
+              </div>
+                
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
-                    <template #default="scope">￥{{ scope.row.money }}</template>
-                </el-table-column>
-                <el-table-column label="头像(查看大图)" align="center">
-                    <template #default="scope">
+                <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="thumb" label="缩略图">
+                  <template #default="scope">
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
-                        </el-image>
+                        </el-image>  
+                        <el-image-viewer
+                        v-if="data.showViewer"
+                        @close="closeViewer"
+                        :url-list="[scope.row.thumb]" />                    
                     </template>
+                    
                 </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column label="状态" align="center">
-                    <template #default="scope">
+                <el-table-column prop="programName" label="节目名称"></el-table-column>
+                <el-table-column prop="resolutionRatio" label="分辨率"></el-table-column>
+                <el-table-column prop="programDuration" label="节目时长"></el-table-column>
+                <el-table-column prop="programSize" label="节目大小"></el-table-column>
+                <el-table-column prop="planState" label="计划状态">
+                  <template #default="scope">
                         <el-tag :type="
-                                scope.row.state === '成功'
+                                scope.row.progromState === '未使用'
                                     ? 'success'
-                                    : scope.row.state === '失败'
+                                    : scope.row.progromState === '使用中'
                                     ? 'danger'
                                     : ''
-                            ">{{ scope.row.state }}</el-tag>
+                            ">{{ scope.row.progromState }}</el-tag>
                     </template>
                 </el-table-column>
-
-                <el-table-column prop="date" label="注册时间"></el-table-column>
+                <el-table-column prop="author" label="作者"></el-table-column>
+                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
+                      <el-button type="text" @click="viewImage()">预览</el-button>
+                      <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">修改
                         </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">复制
+                        </el-button>
+                        <el-button type="text"  class="red"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">加密下载
+                        </el-button>
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">发布
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -60,11 +97,40 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" v-model="editVisible" width="30%">
             <el-form label-width="70px">
-                <el-form-item label="用户名">
+                <el-form-item label="账户名">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
+                <el-form-item label="密码">
+                    <el-input
+                      v-model="form.password"
+                      type="password"
+                      placeholder="Please input password"
+                      show-password
+                    />
+                </el-form-item>
+                <el-form-item label="所属机构">
+                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属角色">
+                    <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="账号状态">
+                    <el-select v-model="form.state" placeholder="账号状态" class="handle-select mr10">
+                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="真实姓名">
+                    <el-input v-model="form.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="form.mail"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input v-model="form.phoneNumber"></el-input>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -74,6 +140,73 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 节目详情 -->
+        <el-dialog :data="tableData" v-model="visible" :show-close="false">
+          <template #default="scope">
+            <div class="my-header">
+              <el-tabs type="border-card">
+                <el-tab-pane label="计划详情" >
+                  <div class="detail">
+                    <!-- <span>计划名称：{{form.planName}}</span>  -->
+                    <el-row>
+                      <el-col :span="12">计划名称：{{form.planName}}</el-col>
+                      <el-col :span="12">播放日期：{{form.playDate}}</el-col>
+                      <el-col :span="12">播放模式：{{form.playMode}}</el-col>
+                      <el-col :span="12">播放策略：{{form.playTactics}}</el-col>
+                      <el-col :span="12">多屏同步：{{form.synchronous}}</el-col>
+                      <el-col :span="12">发布状态：{{form.planState}}</el-col>
+                      <el-col :span="24">创建时间：{{form.updateTime}}</el-col>
+                      <el-col :span="12">循环类型：{{form.loopType}}</el-col>
+                      <el-col :span="12">循环时间段：{{form.loopTime}}</el-col>
+                    </el-row>
+                  </div>
+                  <div class="progrom">
+                    <span>已选节目：</span>
+                    <div class="pgInfo">
+                    
+                        <el-image class="table-td-thumb" :src="form.thumb"  :preview-src-list="form.thumb">
+                        </el-image>
+                   
+                    </div>
+                  </div>
+                  <div class="result">
+                    <span>原因：</span>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="设备详情">设备详情</el-tab-pane>
+              </el-tabs>
+              <div class="backBtn">
+                <el-button  type="primary" @click="visible=false">返回</el-button>
+              </div>
+              
+            </div>
+          </template>
+        </el-dialog>
+
+         <el-dialog
+            v-model="dialogVisible"
+            title="设置播放时间段"
+            width="50%"
+          >
+              <span>循环时间段：</span>
+            <el-time-picker
+                v-model="value2"
+                is-range
+                range-separator="To"
+                start-placeholder="Start time"
+                end-placeholder="End time"
+                value-format="HH:mm:ss"
+                @change="addtq"
+              />
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogVisible = false"
+                  >Confirm</el-button
+                >
+              </span>
+            </template>
+          </el-dialog>
     </div>
 </template>
 
@@ -86,18 +219,50 @@ export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            address: "",
-            name: "",
-            pageIndex: 1,
-            pageSize: 10,
+            // address: "",
+            // name: "",
+            // pageIndex: 1,
+            // pageSize: 10,
+
+            
         });
-        const tableData = ref([]);
+        const data = reactive({
+          showViewer:false,
+          showPL:true
+        })
+        const tableData = reactive([
+          {
+            
+            thumb:["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
+            programName:"1324564",
+            programState:"待发布",
+            playMode:"按时段播放",
+            playDate:"2022-06-29",
+            playTactics:"替换",
+            author:"jx",
+            checker:"jiejie",
+            updateTime:"boom"
+          },
+           {
+            
+            thumb:["https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"],
+            programName:"1324564",
+            programState:"待发布",
+            playMode:"按时段播放",
+            playDate:"2022-06-29",
+            playTactics:"替换",
+            author:"jx",
+            checker:"jiejie",
+            updateTime:"boom"
+          }
+        ]);
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
             fetchData(query).then((res) => {
-                tableData.value = res.list;
-                pageTotal.value = res.pageTotal || 50;
+                console.log(res.data)
+                // tableData.value = res.list;
+                // pageTotal.value = res.pageTotal || 50;
             });
         };
         getData();
@@ -128,10 +293,34 @@ export default {
 
         // 表格编辑时弹窗和保存
         const editVisible = ref(false);
+        //新建账户弹窗和保存
+        const createVisible = ref(false);
+        //节目详情
+        const visible = ref(false)
+
+        const dialogVisible = ref(false)
         let form = reactive({
-            name: "",
-            address: "",
+            showViewer: false,
+            thumb:[],
+            planName:"",
+            planState:"",
+            playMode:"",
+            playDate:"",
+            playTactics:"sfsf",
+            synchronous:"",
+            loopType:"",
+            loopTime:"",
+            author:"",
+            checker:"",
+            updateTime:""
+
         });
+        // const handleImg = (index,row) =>{
+        //   Object.keys(form).forEach((item) => {
+        //         form[item] = row[item];
+        //     });
+        //   visible.value = true
+        // }
         let idx = -1;
         const handleEdit = (index, row) => {
             idx = index;
@@ -140,6 +329,11 @@ export default {
             });
             editVisible.value = true;
         };
+        const handleCreate = () => {
+           
+            createVisible.value = true;
+            console.log(createVisible.value)
+        };
         const saveEdit = () => {
             editVisible.value = false;
             ElMessage.success(`修改第 ${idx + 1} 行成功`);
@@ -147,37 +341,66 @@ export default {
                 tableData.value[idx][item] = form[item];
             });
         };
+        const viewImage = () => {
 
+          data.showViewer = true;
+          console.log(data.showViewer)
+
+        }
+        const closeViewer = () => {
+         data.showViewer = false
+        }
         return {
             query,
             tableData,
             pageTotal,
             editVisible,
+            createVisible,
+            dialogVisible,
             form,
+            visible,
+            data,
             handleSearch,
             handlePageChange,
             handleDelete,
             handleEdit,
+            viewImage,
+            closeViewer,
             saveEdit,
+            handleCreate
         };
     },
 };
 </script>
 
 <style scoped>
+
+.pgInfo {
+margin-left: 70px; 
+margin-top: -13px;
+height: 150px;
+border: 1px solid black;
+}
+.backBtn {
+  margin-top: 10px;
+  margin-left: 700px;
+}
 .handle-box {
     margin-bottom: 20px;
 }
-
+.op2 {
+ 
+}
 .handle-select {
-    width: 120px;
+    width: 130px;
 }
 
 .handle-input {
-    width: 300px;
+    width: 130px;
     display: inline-block;
 }
 .table {
+  margin-top: 10px;
     width: 100%;
     font-size: 14px;
 }
@@ -189,8 +412,11 @@ export default {
 }
 .table-td-thumb {
     display: block;
-    margin: auto;
-    width: 40px;
-    height: 40px;
+    
+    /* margin: auto; */
+     margin: 30px 0 0 30px;
+    padding: 5px;
+    width: 60px;
+    height: 60px;
 }
 </style>
