@@ -28,6 +28,8 @@ public class Programs implements Serializable {
 
     private String programName;
 
+    private String programMaterial;
+
     private String resolution;
 
     private Integer duration;

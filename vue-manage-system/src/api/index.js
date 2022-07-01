@@ -30,5 +30,24 @@ export const userEdit = query => {
         
     });
 };
-
+export const MachineData = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/device',
+        method: 'get',
+        params: query
+        
+    });
+};
+export const MachineEdit = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/device/update',
+        method: 'put',
+        data: query
+        
+    });
+};
 
