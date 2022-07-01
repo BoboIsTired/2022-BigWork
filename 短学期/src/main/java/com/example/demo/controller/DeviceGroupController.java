@@ -33,7 +33,6 @@ public class DeviceGroupController {
     //新增
     @PostMapping
     public Result<?> save(@RequestBody DeviceGroup deviceGroup){
-//        deviceGroup.setUpdateDate(LocalDateTime.now());
         deviceGroupMapper.insert(deviceGroup);
         return Result.success();
     }
@@ -54,7 +53,6 @@ public class DeviceGroupController {
     //修改
     @PutMapping("/update")
     public Result<?> update(@RequestBody DeviceGroup deviceGroup){
-//        deviceGroup.setUpdateDate(LocalDateTime.now());
         deviceGroupMapper.updateById(deviceGroup);
         return Result.success();
     }
