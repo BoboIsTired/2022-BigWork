@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
+            <div class="ms-title">BOE商用画屏发布系统</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="username">
@@ -117,8 +117,8 @@ export default {
     width: 100%;
     line-height: 50px;
     text-align: center;
-    font-size: 20px;
-    color: #fff;
+    font-size: 25px;
+    color: #000;
     border-bottom: 1px solid #ddd;
 }
 

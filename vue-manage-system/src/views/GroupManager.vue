@@ -11,7 +11,7 @@
             <div class="handle-box">
                 <!-- <div class="query"> -->
                 <span>分组名称：</span>
-                <el-input v-model="query.deviceName" size="small" placeholder="请输入设备名称" class="handle-input mr10">
+                <el-input v-model="query.groupName" size="small" placeholder="请输入设备名称" class="handle-input mr10">
                 </el-input>
                 <span>所属机构：</span>
                 <el-select v-model="query.mechanism" placeholder="请选择所属机构" class="handle-select mr10">
@@ -19,13 +19,14 @@
                 </el-select>
                 <el-button @click="handleClean">重置</el-button>
                 <el-button type="primary" @click="handleSearch">查询</el-button>
+                <el-button type="primary" @click="handleSearch">新建分组</el-button>
             </div>
 
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
                 <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
                 <el-table-column type="selection"></el-table-column>
-                <el-table-column prop="mac" label="分组id"></el-table-column>
-                <el-table-column prop="deviceName" label="分组名称">
+                <el-table-column prop="id" label="分组id"></el-table-column>
+                <el-table-column prop="groupName" label="分组名称">
                 </el-table-column>
                 <el-table-column prop="mechanism" label="所属机构"></el-table-column>
                 <!-- <el-table-column label="头像(查看大图)" align="center">
@@ -34,8 +35,8 @@
                         </el-image>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="plan" label="设备数量"></el-table-column>
-                <el-table-column prop="plan" label="描述"></el-table-column>
+                <el-table-column prop="deviceCount" label="设备数量"></el-table-column>
+                <el-table-column prop="description" label="描述"></el-table-column>
                 <!-- <el-table-column label="状态" align="center">
                     <template #default="scope">
                         <el-tag :type="
@@ -86,51 +87,32 @@
                 </span>
             </template>
         </el-dialog>
-        <!-- 节目详情 -->
+         <!-- 详情弹出框 -->
         <el-dialog :data="tableData" v-model="visible" :show-close="false">
             <template #default="scope">
                 <div class="my-header">
                     <el-tabs type="border-card">
-                        <el-tab-pane label="设备信息">
+                        <el-tab-pane label="分组详情">
                             <div class="detail">
                                 <el-row>
-                                    <el-col :span="12">设备型号：HiDPTAndroid Hi3751V553</el-col>
-                                    <el-col :span="12">系统版本：BOE_iGallery32_V13103_V5.2.0</el-col>
-                                    <el-col :span="12">设备ip：{{ form.ip }}</el-col>
-                                    <el-col :span="12">信发版本：1.3.1</el-col>
-                                    <el-col :span="12">有线MAC地址：{{ form.mac }}</el-col>
-                                    <el-col :span="12">无线MAC地址：{{ form.mac }}</el-col>
-                                    <el-col :span="12">运行内存：0.96 GB</el-col>
-                                    <el-col :span="12">SN:{{ form.snCode }}</el-col>
-                                    <el-col :span="12">储存空间：4.65 GB可用（共 5.39 GB）</el-col>
-                                    <el-col :span="12">激活时间：2022-06-23 10:40:12</el-col>
-                                </el-row>
-                            </div>
-                        </el-tab-pane>
-                        <el-tab-pane label="安装信息">
-                            <div class="detail">
-                                <el-row>
-                                    <el-col :span="12">设备名称：测试误删</el-col>
-                                    <el-col :span="12">注册时间：{{ form.startDate }}</el-col>
-                                    <el-col :span="12">所属分组：{{ form.deviceGroup }}</el-col>
-                                    <el-col :span="12">信发版本：1.3.1</el-col>
-                                    <el-col :span="12">分辨率：{{ form.resolution }}</el-col>
+                                    <el-col :span="12">分组名称：{{ form.groupName }}</el-col>
                                     <el-col :span="12">所属机构：{{ form.mechanism }}</el-col>
-                                    <el-col :span="12">屏显方式：横屏</el-col>
-                                    <el-col :span="24">安装位置:中国浙江省杭州市拱墅区上塘街道东教路</el-col>
+                                    <el-col :span="24">描述：{{ form.description }}</el-col>
+                                    <el-col :span="24">设备选择：</el-col>
+                                    <el-table :data="tableData" border class="table" ref="multipleTable"
+                                        header-cell-class-name="table-header">
+                                        <el-table-column prop="id" label="设备名称"></el-table-column>
+                                        <el-table-column prop="groupName" label="MAC地址">
+                                        </el-table-column>
+                                        <el-table-column prop="mechanism" label="分辨率"></el-table-column>
+                                        <el-table-column prop="deviceCount" label="当前计划"></el-table-column>
+                                        <el-table-column prop="description" label="设备状态"></el-table-column>
+                                       
+                                    </el-table>
                                 </el-row>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="状态信息">
-                            <div class="detail">
-                                <el-row>
-                                    <el-col :span="12">设备状态：{{ form.state }}</el-col>
-                                    <el-col :span="12">当前计划：{{ form.plan }}</el-col>
-                                    <el-col :span="12">设备运行时长：</el-col>
-                                    <el-col :span="12">最后心跳时间：{{ form.deadDate }}</el-col>
-                                </el-row>
-                            </div>
-                        </el-tab-pane>
+
                     </el-tabs>
                     <div class="backBtn">
                         <el-button type="primary" @click="visible = false">返回</el-button>
@@ -145,45 +127,31 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { MachineData, MachineEdit } from "../api/index";
+import { GroupData, MachineEdit } from "../api/index";
 export default {
     name: "basetable",
     setup() {
         const query = reactive({
             id: "",
-            deviceName: "",
+            groupName: "",
             mechanism: "",
-            deviceGroup: "",
-            mac: "",
-            snCode: "",
-            ip: "",
-            plan: "",
-            state: "",
-            resolution: "",
-            deadDate: "",
-            startDate: "",
+            description: "",
+            deviceCount: "",
 
         });
         const tableData = ref([
             {
                 id: "",
-                deviceName: "",
+                groupName: "",
                 mechanism: "",
-                deviceGroup: "",
-                mac: "",
-                snCode: "",
-                ip: "",
-                plan: "",
-                state: "",
-                resolution: "",
-                deadDate: "",
-                startDate: "",
+                description: "",
+                deviceCount: "",
             }
         ]);
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
-            MachineData().then((res) => {
+            GroupData().then((res) => {
                 // console.log(res.data)
                 tableData.value = res.data.records;
                 pageTotal.value = res.data.records.length || 50;
@@ -218,15 +186,8 @@ export default {
                 .catch(() => { });
         };
         const handleClean = () => {
-            query.deviceGroup = "";
-            query.deviceName = "";
-            query.ip = "";
-            query.mac = "";
             query.mechanism = "";
-            query.plan = "";
-            query.resolution = "";
-            query.snCode = "";
-            query.state = "";
+            query.groupName = "";
         };
         // 表格编辑时弹窗和保存
         const editVisible = ref(false);
@@ -236,17 +197,10 @@ export default {
         const visible = ref(false)
         let form = reactive({
             id: "",
-            deviceName: "",
+            groupName: "",
             mechanism: "",
-            deviceGroup: "",
-            mac: "",
-            snCode: "",
-            ip: "",
-            plan: "",
-            state: "",
-            resolution: "",
-            deadDate: "",
-            startDate: "",
+            description: "",
+            deviceCount: "",
 
         });
         const handleImg = (index, row) => {
@@ -282,7 +236,7 @@ export default {
                         editVisible.value = false;
                         ElMessage.success(`修改第 ${idx + 1} 行成功`);
                         getData();
-                    }else{
+                    } else {
                         ElMessage.error(`修改失败`);
                     }
 

@@ -50,4 +50,14 @@ export const MachineEdit = query => {
         
     });
 };
+export const GroupData = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/deviceGroup',
+        method: 'get',
+        params: query
+        
+    });
+};
 
