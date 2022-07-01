@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * <p>
@@ -68,10 +69,13 @@ public class MaterialController {
         staticPath = java.net.URLDecoder.decode(staticPath, "utf-8");
 //        String fileName = file.getOriginalFilename();  //获取文件名
 
-
-
+        //配置一个随机uuid
+        String uuid = IdUtil.fastSimpleUUID();
+        //拼写新的文件名
+        String newName = uuid+StrUtil.DOT+upload.getType();
         // 图片存储目录及图片名称
-        String url_path = "imgs" + File.separator + upload.getFileName();
+        String url_path = "imgs" + File.separator + newName;
+
         //图片保存路径
         String savePath = staticPath + File.separator + url_path;
         System.out.println("图片保存地址："+savePath);
@@ -91,7 +95,7 @@ public class MaterialController {
             //存储数据库
         upload.setCreateDate(LocalDateTime.now());
 //        String url = "http://localhost:3000/material/"+uuid;
-        String url = upload.getFileName();
+        String url = newName;
         upload.setUrl(url);
         materialMapper.insert(upload);
 
