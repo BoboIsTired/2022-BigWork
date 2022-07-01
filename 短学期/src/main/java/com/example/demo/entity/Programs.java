@@ -14,39 +14,33 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author anonymous
- * @since 2022-06-29
+ * @since 2022-07-01
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Device implements Serializable {
+public class Programs implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String deviceName;
+    private String programName;
 
-    private String mechanism;
-
-    private String deviceGroup;
-
-    private String mac;
-
-    private String snCode;
-
-    private String ip;
-
-    private String plan;
+    private String programMaterial;
 
     private String resolution;
 
-    private Integer state;
+    private Integer duration;
 
-    private LocalDateTime startDate;
+    private Double programSize;
 
-    private LocalDateTime deadDate;
+    private String programState;
+
+    private String author;
+
+    private LocalDateTime updateDate;
 
 
 }
