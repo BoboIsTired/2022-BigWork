@@ -30,12 +30,12 @@
             </div>
             <div class="op2">
               <div v-if="data.showPL" class="btng1">
-                <el-button type="primary"  @click="dialogVisible=true" >新建账户</el-button>
+                <el-button type="primary"  @click="dialogVisible=true" >新建节目</el-button>
                 <el-button @click="handleSearch" style="margin-left:30px" disabled>批量发布</el-button>
                 <el-button @click="handleCreate" style="margin-left:30px" disabled>批量删除</el-button>
               </div>
               <div v-else class="btng2">
-                <el-button type="primary"  @click="dialogVisible=true" >新建账户</el-button>
+                <el-button type="primary"  @click="dialogVisible=true" >新建节目</el-button>
                 <el-button type="primary" @click="handleSearch" style="margin-left:30px" >批量发布</el-button>
                 <el-button type="primary"  @click="handleCreate" style="margin-left:30px" >批量删除</el-button>
               </div>
@@ -49,8 +49,8 @@
                         <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
                         </el-image>  
                         <el-image-viewer
-                        v-if="data.showViewer"
-                        @close="closeViewer"
+                        v-if="scope.row.showViewer"
+                        @close="closeViewer(scope.$index, scope.row)"
                         :url-list="[scope.row.thumb]" />                    
                     </template>
                     
@@ -74,7 +74,7 @@
                 <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                      <el-button type="text" @click="viewImage()">预览</el-button>
+                      <el-button type="text" @click="viewImage(scope.$index, scope.row)">预览</el-button>
                       <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">修改
                         </el-button>
                         <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">复制
@@ -98,17 +98,9 @@
         <el-dialog title="编辑" v-model="editVisible" width="30%">
             <el-form label-width="70px">
                 <el-form-item label="账户名">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.programName"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input
-                      v-model="form.password"
-                      type="password"
-                      placeholder="Please input password"
-                      show-password
-                    />
-                </el-form-item>
-                <el-form-item label="所属机构">
+                <el-form-item label="分辨率">
                     <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
                         <el-option key="1" label="广东省" value="广东省"></el-option>
                     </el-select>
@@ -140,69 +132,26 @@
                 </span>
             </template>
         </el-dialog>
-        <!-- 节目详情 -->
-        <el-dialog :data="tableData" v-model="visible" :show-close="false">
-          <template #default="scope">
-            <div class="my-header">
-              <el-tabs type="border-card">
-                <el-tab-pane label="计划详情" >
-                  <div class="detail">
-                    <!-- <span>计划名称：{{form.planName}}</span>  -->
-                    <el-row>
-                      <el-col :span="12">计划名称：{{form.planName}}</el-col>
-                      <el-col :span="12">播放日期：{{form.playDate}}</el-col>
-                      <el-col :span="12">播放模式：{{form.playMode}}</el-col>
-                      <el-col :span="12">播放策略：{{form.playTactics}}</el-col>
-                      <el-col :span="12">多屏同步：{{form.synchronous}}</el-col>
-                      <el-col :span="12">发布状态：{{form.planState}}</el-col>
-                      <el-col :span="24">创建时间：{{form.updateTime}}</el-col>
-                      <el-col :span="12">循环类型：{{form.loopType}}</el-col>
-                      <el-col :span="12">循环时间段：{{form.loopTime}}</el-col>
-                    </el-row>
-                  </div>
-                  <div class="progrom">
-                    <span>已选节目：</span>
-                    <div class="pgInfo">
-                    
-                        <el-image class="table-td-thumb" :src="form.thumb"  :preview-src-list="form.thumb">
-                        </el-image>
-                   
-                    </div>
-                  </div>
-                  <div class="result">
-                    <span>原因：</span>
-                  </div>
-                </el-tab-pane>
-                <el-tab-pane label="设备详情">设备详情</el-tab-pane>
-              </el-tabs>
-              <div class="backBtn">
-                <el-button  type="primary" @click="visible=false">返回</el-button>
-              </div>
-              
-            </div>
-          </template>
-        </el-dialog>
-
          <el-dialog
             v-model="dialogVisible"
-            title="设置播放时间段"
+            title="新建节目"
             width="50%"
           >
-              <span>循环时间段：</span>
-            <el-time-picker
-                v-model="value2"
-                is-range
-                range-separator="To"
-                start-placeholder="Start time"
-                end-placeholder="End time"
-                value-format="HH:mm:ss"
-                @change="addtq"
-              />
+              <el-form label-width="50px">
+                <el-form-item label="名称：">
+                    <el-input v-model="form1.programName"></el-input>
+                </el-form-item>
+                <el-form-item label="分辨率：">
+                    <el-select v-model="form1.resolutionRatio" placeholder="分辨率" class="handle-select mr10">
+                        <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
+                        <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
             <template #footer>
               <span class="dialog-footer">
-                <el-button @click="dialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="dialogVisible = false"
-                  >Confirm</el-button
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="addProgram()">确定</el-button
                 >
               </span>
             </template>
@@ -214,7 +163,7 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { fetchData } from "../api/index";
-
+import { useRouter } from "vue-router";
 export default {
     name: "basetable",
     setup() {
@@ -227,12 +176,12 @@ export default {
             
         });
         const data = reactive({
-          showViewer:false,
           showPL:true
         })
+        const route = new useRouter()
         const tableData = reactive([
           {
-            
+            showViewer:false,
             thumb:["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
             programName:"1324564",
             programState:"待发布",
@@ -244,7 +193,7 @@ export default {
             updateTime:"boom"
           },
            {
-            
+            showViewer:false,
             thumb:["https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"],
             programName:"1324564",
             programState:"待发布",
@@ -302,8 +251,26 @@ export default {
         let form = reactive({
             showViewer: false,
             thumb:[],
-            planName:"",
-            planState:"",
+            programName:"",
+            resolutionRatio:"",           
+            programState:"",
+            playMode:"",
+            playDate:"",
+            playTactics:"sfsf",
+            synchronous:"",
+            loopType:"",
+            loopTime:"",
+            author:"",
+            checker:"",
+            updateTime:""
+
+        });
+        let form1 = reactive({
+            showViewer: false,
+            thumb:[],
+            programName:"",
+            resolutionRatio:"",           
+            programState:"",
             playMode:"",
             playDate:"",
             playTactics:"sfsf",
@@ -341,15 +308,26 @@ export default {
                 tableData.value[idx][item] = form[item];
             });
         };
-        const viewImage = () => {
-
-          data.showViewer = true;
-          console.log(data.showViewer)
+        const viewImage = (index,row) => {
+          row.showViewer = true
+          // data.showViewer = true;
+         
 
         }
-        const closeViewer = () => {
-         data.showViewer = false
+        const closeViewer = (index,row) => {
+        //  data.showViewer = false
+         row.showViewer = false
         }
+
+        const addProgram = () => {
+          console.log(form1)
+          route.push({
+            path:'/programadd',
+            query:{name:form1.programName,resolution:form1.resolutionRatio}
+          })
+          dialogVisible.value = false
+        }
+
         return {
             query,
             tableData,
@@ -358,6 +336,7 @@ export default {
             createVisible,
             dialogVisible,
             form,
+            form1,
             visible,
             data,
             handleSearch,
@@ -367,7 +346,8 @@ export default {
             viewImage,
             closeViewer,
             saveEdit,
-            handleCreate
+            handleCreate,
+            addProgram
         };
     },
 };
