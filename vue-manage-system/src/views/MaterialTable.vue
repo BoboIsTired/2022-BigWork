@@ -96,7 +96,7 @@
 
 <script>
 import { ref, reactive } from "vue";
-import { MaterialData, userAdd, userEdit } from "../api/index";
+import { MaterialData, MaterialDelete, userEdit } from "../api/index";
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 export default {
@@ -105,11 +105,14 @@ export default {
       fileList: [
 
       ],
+      query:[]
     }
   },
   methods: {
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      MaterialDelete(file.id).then((res) => {
+      console.log(res.msg)
+    });
     },
     handlePreview(file) {
         dialogImageUrl.value = file.url

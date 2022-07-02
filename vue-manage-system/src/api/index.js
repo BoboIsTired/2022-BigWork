@@ -61,7 +61,7 @@ export const GroupData = query => {
     });
 };
 export const MaterialData = query => {
-    // console.log(query)
+    console.log(query)
     return request({
         // url: './table.json',
         url: '/material/page',
@@ -70,4 +70,13 @@ export const MaterialData = query => {
         
     });
 };
-
+export const MaterialDelete = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/material/delete',
+        method: 'put',
+        data: {id:query}
+        
+    });
+};
