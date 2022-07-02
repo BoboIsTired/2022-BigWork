@@ -156,8 +156,8 @@ public class MaterialController {
 
     //逻辑删除
     @PutMapping("/delete")
-    public Result<?> logicalDelete(@RequestBody int id){
-        Material material = materialMapper.selectById(id);
+    public Result<?> logicalDelete(@RequestBody Material material1){
+        Material material = materialMapper.selectById(material1.getId());
         material.setIsDelete(1);
         materialMapper.updateById(material);
         return Result.success();
