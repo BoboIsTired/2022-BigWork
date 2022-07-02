@@ -131,12 +131,16 @@ public class MaterialController {
     @GetMapping("/page")
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam (defaultValue = "10") Integer pageSize,
-                              @RequestParam (defaultValue = "") String search){
+                              @RequestParam (defaultValue = "") String search,
+                              @RequestParam (defaultValue = "0") Integer isDelete){
         LambdaQueryWrapper<Material> wrapper =  Wrappers.<Material>lambdaQuery();
         if (StrUtil.isNotBlank(search)){
             wrapper.like(Material::getFileName,search);
+//            wrapper.and(i->i.like(Material::getFileName,search).like(Material::getIsDelete,isDelete));
+//            wrapper.and(i->i.like(Material::getIsDelete,isDelete));
         }
-        Page<Material> filePage = (Page<Material>) materialMapper.selectPage(new Page<>(pageNum,pageSize),wrapper);
+
+        Page<Material> filePage = (Page<Material>) materialMapper.selectPage(new Page<>(pageNum,pageSize),wrapper.eq(Material::getIsDelete,0));
         return Result.success(filePage);
     }
 
@@ -147,5 +151,14 @@ public class MaterialController {
         materialMapper.updateById(material);
         return Result.success();
     }
+
+    @PutMapping("/delete")
+    public Result<?> logicalDelete(@RequestParam int id){
+        Material material = materialMapper.selectById(id);
+        material.setIsDelete(1);
+        materialMapper.updateById(material);
+        return Result.success();
+    }
+
 
 }
