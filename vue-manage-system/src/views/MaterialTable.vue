@@ -45,12 +45,12 @@
           </div>
         </div>
         <div class="right">
-            <el-row class="mb-4">
-                <el-button>取消全选</el-button>
-                <el-button type="primary">全选</el-button>
-                <el-button type="success">批量删除</el-button>
-                <el-button type="info">上传素材</el-button>
-            </el-row>
+          <el-row class="mb-4">
+            <el-button>取消全选</el-button>
+            <el-button type="primary">全选</el-button>
+            <el-button type="success">批量删除</el-button>
+            <el-button type="info">上传素材</el-button>
+          </el-row>
         </div>
       </div>
 
@@ -77,19 +77,16 @@
             </el-card>
           </el-col> -->
           <el-col>
-            <el-upload
-                v-model:file-list="fileList"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-              >
-                <el-icon><Plus /></el-icon>
-              </el-upload>
+            <el-upload v-model:file-list="fileList" action="/api/material/upload" list-type="picture-card"
+              :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+              <el-icon>
+                <Plus />
+              </el-icon>
+            </el-upload>
 
-              <el-dialog v-model="dialogVisible">
-                <img w-full :src="dialogImageUrl" alt="Preview Image" />
-              </el-dialog>
+            <el-dialog v-model="dialogVisible">
+              <img w-full :src="dialogImageUrl" alt="Preview Image" />
+            </el-dialog>
           </el-col>
         </el-row>
       </div>
@@ -98,30 +95,37 @@
 </template>
 
 <script>
+import { MaterialData, userAdd, userEdit } from "../api/index";
 export default {
-    data() {
-      return {
-        fileList: [
-          {
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-          },
-          {
-            name: 'food2.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-          },
-        ],
+  data() {
+    return {
+      fileList: [
+
+      ],
+    }
+  },
+  methods: {
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+  },
+  mounted() {
+    MaterialData().then((res) => {
+      var list = res.data
+      // console.log(res.data)
+      this.fileList = list.records;
+      // this.fileList[0].url='/api/imgs/'+this.fileList[0].url
+      // console.log(this.fileList[0].url)
+      for(var i=0;i<this.fileList.length;i++){
+        this.fileList[i].url='/api/imgs/'+this.fileList[i].url
       }
-    },
-    methods: {
-      handleRemove(file, fileList) {
-        console.log(file, fileList)
-      },
-      handlePreview(file) {
-        console.log(file)
-      },
-    },
+
+    });
   }
+}
 </script>
 
 <style scoped>
@@ -137,46 +141,57 @@ export default {
   width: 300px;
   display: inline-block;
 }
+
 .table {
   width: 100%;
   font-size: 14px;
 }
+
 .red {
   color: #ff0000;
 }
+
 .mr10 {
   margin-right: 10px;
 }
+
 .table-td-thumb {
   display: block;
   margin: auto;
   width: 40px;
   height: 40px;
 }
+
 .title {
   margin-top: 30px;
   display: flex;
   padding-left: 20px;
 }
+
 .el-icon-folder-opened {
   font-size: 30px;
   color: #999;
   padding-right: 10px;
 }
+
 .path {
   padding-top: 10px;
 }
+
 .option {
   padding-top: 30px;
 }
+
 .time {
   font-size: 12px;
   color: #999;
 }
+
 /* 图片 */
-.show{
-    margin-top: 70px;
+.show {
+  margin-top: 70px;
 }
+
 .bottom {
   margin-top: 13px;
   line-height: 12px;
@@ -194,15 +209,15 @@ export default {
   width: 100%;
   display: block;
 }
+
 /* 按钮栏 */
-.t{
-    display: flex;
-    align-items: center;
+.t {
+  display: flex;
+  align-items: center;
 
 }
-.left{
-        margin-right: 300px;
+
+.left {
+  margin-right: 300px;
 }
-
-
 </style>

@@ -68,17 +68,33 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" v-model="editVisible" width="30%">
+        <el-dialog title="编辑" v-model="editVisible" width="80%">
             <el-form label-width="70px">
-                <el-form-item label="设备名称">
+                <el-form-item label="分组名称">
                     <el-input v-model="form.deviceName"></el-input>
                 </el-form-item>
-                <el-form-item label="所属分组">
-                    <el-select v-model="form.deviceGroup" placeholder="所属分组" class="handle-select mr10">
-                        <el-option key="1" label="group_test" value="group_test"></el-option>
-                        <el-option key="2" label="222" value="222"></el-option>
+                <el-form-item label="所属机构">
+                    <el-select v-model="form.deviceGroup" placeholder="所属机构" class="handle-select mr10">
+                        <el-option key="1" label="城院测试" value="城院测试"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="描述">
+                    <el-input v-model="form.deviceName"></el-input>
+                </el-form-item>
+                <el-col :span="24">设备选择：</el-col>
+                <el-table :data="tableData" border class="table" ref="multipleTable"
+                    header-cell-class-name="table-header">
+                    <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
+                    <el-table-column type="selection"></el-table-column>
+                    <el-table-column prop="id" label="设备名称"></el-table-column>
+                    <el-table-column prop="groupName" label="MAC地址">
+                    </el-table-column>
+                    <el-table-column prop="mechanism" label="分辨率"></el-table-column>
+
+                    <el-table-column prop="deviceCount" label="所属机构"></el-table-column>
+                    <el-table-column prop="description" label="当前计划"></el-table-column>
+                    <el-table-column prop="description" label="设备状态"></el-table-column>
+                </el-table>
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
@@ -87,7 +103,7 @@
                 </span>
             </template>
         </el-dialog>
-         <!-- 详情弹出框 -->
+        <!-- 详情弹出框 -->
         <el-dialog :data="tableData" v-model="visible" :show-close="false">
             <template #default="scope">
                 <div class="my-header">
@@ -107,7 +123,7 @@
                                         <el-table-column prop="mechanism" label="分辨率"></el-table-column>
                                         <el-table-column prop="deviceCount" label="当前计划"></el-table-column>
                                         <el-table-column prop="description" label="设备状态"></el-table-column>
-                                       
+
                                     </el-table>
                                 </el-row>
                             </div>

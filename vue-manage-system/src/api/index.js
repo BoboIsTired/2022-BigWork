@@ -60,4 +60,14 @@ export const GroupData = query => {
         
     });
 };
+export const MaterialData = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/material/page',
+        method: 'get',
+        params: query
+        
+    });
+};
 

@@ -172,14 +172,15 @@
 
 <script>
 import Schart from "vue-schart";
-import { reactive } from "vue";
+import { reactive,ref } from "vue";
+import { fetchData, userAdd, userEdit } from "../api/index";
 export default {
   name: "dashboard",
   components: { Schart },
   setup() {
-    let num_p = "321";
-    let num_plan = "321";
-    let num_m = "321";
+    let num_p = ref("321");
+    let num_plan =ref("321") ;
+    let num_m = ref("321");
     let sb_l = "0";
     let sb_z = "1";
     let sb_k = "0";
@@ -187,7 +188,15 @@ export default {
     let picture = "20";
     let ship = "10";
     let music = "20";
-
+    const getData = () => {
+            // fetchData().then((res) => {
+            //     var list = res.data
+            //     // console.log(list.records)
+            //     tableData.value = list.records;
+            //     pageTotal.value = list.records.length || 50;
+            // });
+        };
+        getData();
     const name = localStorage.getItem("ms_username");
     // const role = name === "admin" ? "超级管理员" : "普通用户";
     const data = reactive([
