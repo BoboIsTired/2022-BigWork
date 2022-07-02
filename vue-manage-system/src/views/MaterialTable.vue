@@ -98,7 +98,13 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+// import  { UploadProps, UploadUserFile } from 'element-plus'
+
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
 export default {
+  
     data() {
       return {
         fileList: [
@@ -113,11 +119,15 @@ export default {
         ],
       }
     },
+
+    
     methods: {
       handleRemove(file, fileList) {
         console.log(file, fileList)
       },
       handlePreview(file) {
+        dialogImageUrl.value = file.url
+        dialogVisible.value = true
         console.log(file)
       },
     },
