@@ -61,7 +61,7 @@ export const GroupData = query => {
     });
 };
 export const MaterialData = query => {
-    console.log(query)
+    // console.log(query)
     return request({
         // url: './table.json',
         url: '/material/page',
@@ -77,6 +77,26 @@ export const MaterialDelete = query => {
         url: '/material/delete',
         method: 'put',
         data: {id:query}
+        
+    });
+};
+export const ProgramData = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/programs',
+        method: 'get',
+        params: query
+        
+    });
+};
+export const MaterialCreate = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/programs',
+        method: 'post',
+        data:query
         
     });
 };
