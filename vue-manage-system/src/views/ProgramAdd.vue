@@ -18,7 +18,7 @@
     <div class="right">
         <div>素材：</div>
         <div v-for="(item,index) in state.imgList" :key="index" class="content">
-          <img :src="item.pic" style="height:100px;width:100px;border:0">
+          <img :src="item.pic" style="height:100px;width:100px;border:0" @click="showimg(index)">
         </div>
 
     </div>
@@ -51,8 +51,12 @@ export default {
     state.progranName = router.currentRoute.value.query.name
      state.resolutionRatio = router.currentRoute.value.query.resolution
     console.log(state)
+    const showimg = (index) => {
+      state.imgUrl = state.imgList[index].pic
+    }
     return {
       state,
+      showimg
     }
   }
   
