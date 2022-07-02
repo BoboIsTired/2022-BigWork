@@ -26,7 +26,9 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -152,8 +154,9 @@ public class MaterialController {
         return Result.success();
     }
 
+    //逻辑删除
     @PutMapping("/delete")
-    public Result<?> logicalDelete(@RequestParam int id){
+    public Result<?> logicalDelete(@RequestBody int id){
         Material material = materialMapper.selectById(id);
         material.setIsDelete(1);
         materialMapper.updateById(material);
@@ -161,4 +164,15 @@ public class MaterialController {
     }
 
 
+    //真正删除
+    @PutMapping("/realDelete")
+    public String realDelete(@RequestParam String url) throws FileNotFoundException, UnsupportedEncodingException {
+        //获取项目classes/static的地址
+        String staticPath = ResourceUtils.getURL("classpath:").getPath() + "static";
+        staticPath = java.net.URLDecoder.decode(staticPath, "utf-8");
+
+        String deletePath = staticPath+File.separator+ "imgs" +File.separator+ url;
+        return deletePath;
+//        return Result.success();
+    }
 }
