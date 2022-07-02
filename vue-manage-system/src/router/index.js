@@ -40,6 +40,13 @@ const routes = [{
       },
       component: () => import( /* webpackChunkName: "table" */ "../views/ProgramTable.vue")
     }, {
+      path: "/programadd",
+      name: "programadd",
+      meta: {
+        title: '新建节目'
+      },
+      component: () => import( /* webpackChunkName: "login" */ "../views/ProgramAdd.vue")
+    },{
       path: "/tableN",
       name: "basetableN",
       meta: {
