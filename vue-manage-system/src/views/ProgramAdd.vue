@@ -8,7 +8,7 @@
     <div class="right">
         <div>素材：</div>
         <div v-for="(item,index) in state.imgList" :key="index" class="content">
-          <img :src="item.pic" style="height:100px;width:100px;border:0" @click="showimg(index)">
+          <img :src="item.url" style="height:100px;width:100px;border:0" @click="showimg(index)">
         </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
     <div class="right">
         <div>素材：</div>
         <div v-for="(item,index) in state.imgList" :key="index" class="content">
-          <img :src="item.pic" style="height:100px;width:100px;border:0" @click="showimg(index)">
+          <img :src="item.url" style="height:100px;width:100px;border:0" @click="showimg(index)">
         </div>
 
     </div>
@@ -31,6 +31,7 @@
 <script>
 import { reactive } from '@vue/reactivity';
 import { useRouter } from "vue-router";
+import { MaterialData, MaterialDelete, userEdit } from "../api/index";
 export default {
   setup () {
     const router = useRouter();
@@ -38,26 +39,36 @@ export default {
       programName:"",
        resolutionRatio:"",
        programDuration:"",
-       imgUrl:"https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-       imgList:[{pic:"https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
-       {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
+       imgUrl:"",
+       imgList:[
+      //   {pic:"https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"},
+      //  {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
+      //  {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
+       
        ]
     })
+    const getData = () => {
+            MaterialData().then((res) => {
+                var list = res.data
+                
+                // state.imgList = list.records;
+                state.imgList = list.records;
+                console.log(state.imgList)
+                for(let i=0;i<list.records.length;i++){
+                  state.imgList[i].url='/api/imgs/'+state.imgList[i].url
+                }
+              //   console.log(state.imgList[0].pic)
+               state.imgUrl=state.imgList[0].url
+            });
+        };
+        getData();
     // console.log(router.currentRoute.value.query.form1.progranName)
     state.programName = router.currentRoute.value.query.name
      state.resolutionRatio = router.currentRoute.value.query.resolution
      state.programDuration = router.currentRoute.value.query.duration
-    console.log(state)
+    // console.log(state)
     const showimg = (index) => {
-      state.imgUrl = state.imgList[index].pic
+      state.imgUrl = state.imgList[index].url
     }
     return {
       state,

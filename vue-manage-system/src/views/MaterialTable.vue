@@ -130,6 +130,7 @@ export default {
       for(var i=0;i<this.fileList.length;i++){
         this.fileList[i].url='/api/imgs/'+this.fileList[i].url
       }
+      console.log(this.fileList)
 
     });
 
