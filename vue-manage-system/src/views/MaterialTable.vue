@@ -95,7 +95,10 @@
 </template>
 
 <script>
+import { ref, reactive } from "vue";
 import { MaterialData, userAdd, userEdit } from "../api/index";
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
 export default {
   data() {
     return {
@@ -109,8 +112,10 @@ export default {
       console.log(file, fileList)
     },
     handlePreview(file) {
-      console.log(file)
-    },
+        dialogImageUrl.value = file.url
+        dialogVisible.value = true
+        console.log(file)
+      },
   },
   mounted() {
     MaterialData().then((res) => {
@@ -124,6 +129,7 @@ export default {
       }
 
     });
+
   }
 }
 </script>
