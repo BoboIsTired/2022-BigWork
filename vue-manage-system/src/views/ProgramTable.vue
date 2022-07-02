@@ -135,9 +135,9 @@
          <el-dialog
             v-model="dialogVisible"
             title="新建节目"
-            width="50%"
+            width="40%"
           >
-              <el-form label-width="50px">
+              <el-form label-width="70px">
                 <el-form-item label="名称：">
                     <el-input v-model="form1.programName"></el-input>
                 </el-form-item>
@@ -147,6 +147,9 @@
                         <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
                     </el-select>
                 </el-form-item>
+                  <el-form-item label="时长：">
+                        <el-input-number v-model="num" :min="1" :max="60" @change="handleChange" />
+                  </el-form-item>
             </el-form>
             <template #footer>
               <span class="dialog-footer">
@@ -186,6 +189,7 @@ export default {
             programName:"1324564",
             programState:"待发布",
             playMode:"按时段播放",
+            programDuration:"1",
             playDate:"2022-06-29",
             playTactics:"替换",
             author:"jx",
@@ -198,6 +202,7 @@ export default {
             programName:"1324564",
             programState:"待发布",
             playMode:"按时段播放",
+            programDuration:"1",
             playDate:"2022-06-29",
             playTactics:"替换",
             author:"jx",
@@ -254,6 +259,7 @@ export default {
             programName:"",
             resolutionRatio:"",           
             programState:"",
+            programDuration:"1",
             playMode:"",
             playDate:"",
             playTactics:"sfsf",
@@ -269,7 +275,8 @@ export default {
             showViewer: false,
             thumb:[],
             programName:"",
-            resolutionRatio:"",           
+            resolutionRatio:"",   
+            programDuration:"1",        
             programState:"",
             playMode:"",
             playDate:"",
@@ -323,9 +330,15 @@ export default {
           console.log(form1)
           route.push({
             path:'/programadd',
-            query:{name:form1.programName,resolution:form1.resolutionRatio}
+            query:{name:form1.programName,resolution:form1.resolutionRatio,duration:form1.programDuration}
           })
           dialogVisible.value = false
+        }
+
+        const num = ref(1)
+        const handleChange = () => {
+          form1.programDuration = num.value
+          console.log(num.value)
         }
 
         return {
@@ -339,6 +352,8 @@ export default {
             form1,
             visible,
             data,
+            num,
+            handleChange,
             handleSearch,
             handlePageChange,
             handleDelete,
