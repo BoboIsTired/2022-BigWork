@@ -175,12 +175,6 @@ import { fetchData, userAdd, userEdit } from "../api/index";
 export default {
     name: "basetable",
     setup() {
-        // const data = reactive(
-        //     {
-        //         state: true,
-        //         stateText: ""
-
-        //     })
         const query = reactive({
             accountName: "",
             mechanism: "",
@@ -300,7 +294,7 @@ export default {
                     ElMessage.success(`状态修改成功`);
                     getData();
                 });
-                
+
             }
             else {
                 row.enable = "启用"
@@ -333,9 +327,14 @@ export default {
                 ElMessage.error(`用户详情不能修改为空`);
             } else {
                 userEdit(query).then((res) => {
-                    editVisible.value = false;
-                    ElMessage.success(`修改第 ${idx + 1} 行成功`);
-                    getData();
+                    if (res.msg === "成功") {
+                        editVisible.value = false;
+                        ElMessage.success(`修改第 ${idx + 1} 行成功`);
+                        getData();
+                    } else {
+                        ElMessage.error(`修改失败`);
+                    }
+
                 });
             }
             // Object.keys(form).forEach((item) => {
