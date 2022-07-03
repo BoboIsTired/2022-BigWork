@@ -10,80 +10,77 @@
         <div class="container">
             <div class="handle-box">
                 <!-- <div class="query"> -->
-                  <span>节目名称：</span>
-                  <el-input v-model="query.name" size="small" placeholder="请输入节目名称" class="handle-input mr10"></el-input>
+                <span>节目名称：</span>
+                <el-input v-model="query.name" size="small" placeholder="请输入节目名称" class="handle-input mr10"></el-input>
                 <!-- </div> -->
                 <!-- <el-input v-model="query.name" placeholder="请输入账户名称" class="handle-input mr10"></el-input> -->
                 <span>分辨率：</span>
-                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10" >
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="query.address" placeholder="分辨率" class="handle-select mr10">
+                    <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
+                    <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
                 </el-select>
                 <span>节目状态：</span>
-                <el-select v-model="query.address" placeholder="状态" class="handle-select mr10" >
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="query.address" placeholder="节目状态" class="handle-select mr10">
+                    <el-option key="1" label="未使用" value="未使用"></el-option>
+                    <el-option key="2" label="已发布" value="已发布"></el-option>
                 </el-select>
-               
+
                 <el-button @click="handleSearch">重置</el-button>
-                <el-button type="primary"  @click="handleSearch">查询</el-button>
+                <el-button type="primary" @click="handleSearch">查询</el-button>
             </div>
             <div class="op2">
-              <div v-if="data.showPL" class="btng1">
-                <el-button type="primary"  @click="dialogVisible=true" >新建节目</el-button>
-                <el-button @click="handleSearch" style="margin-left:30px" disabled>批量发布</el-button>
-                <el-button @click="handleCreate" style="margin-left:30px" disabled>批量删除</el-button>
-              </div>
-              <div v-else class="btng2">
-                <el-button type="primary"  @click="dialogVisible=true" >新建节目</el-button>
-                <el-button type="primary" @click="handleSearch" style="margin-left:30px" >批量发布</el-button>
-                <el-button type="primary"  @click="handleCreate" style="margin-left:30px" >批量删除</el-button>
-              </div>
-                
+                <div v-if="data.showPL" class="btng1">
+                    <el-button type="primary" @click="dialogVisible = true">新建节目</el-button>
+                    <!-- <el-button @click="handleSearch" style="margin-left:30px" disabled>批量发布</el-button>
+                <el-button @click="handleCreate" style="margin-left:30px" disabled>批量删除</el-button> -->
+                </div>
+                <div v-else class="btng2">
+                    <el-button type="primary" @click="dialogVisible = true">新建节目</el-button>
+                    <el-button type="primary" @click="handleSearch" style="margin-left:30px">批量发布</el-button>
+                    <el-button type="primary" @click="handleCreate" style="margin-left:30px">批量删除</el-button>
+                </div>
+
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
                 <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="thumb" label="缩略图">
-                  <template #default="scope">
-                        <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
-                        </el-image>  
-                        <el-image-viewer
-                        v-if="scope.row.showViewer"
-                        @close="closeViewer(scope.$index, scope.row)"
-                        :url-list="[scope.row.thumb]" />                    
+                    <template #default="scope">
+                        <el-image class="table-td-thumb" :src="scope.row.programMaterial"
+                            :preview-src-list="[scope.row.programMaterial]">
+                        </el-image>
+                        <el-image-viewer v-if="scope.row.showViewer" @close="closeViewer(scope.$index, scope.row)"
+                            :url-list="[scope.row.programMaterial]" />
                     </template>
-                    
+
                 </el-table-column>
                 <el-table-column prop="programName" label="节目名称"></el-table-column>
-                <el-table-column prop="resolutionRatio" label="分辨率"></el-table-column>
-                <el-table-column prop="programDuration" label="节目时长"></el-table-column>
+                <el-table-column prop="resolution" label="分辨率"></el-table-column>
+                <el-table-column prop="duration" label="节目时长"></el-table-column>
                 <el-table-column prop="programSize" label="节目大小"></el-table-column>
-                <el-table-column prop="planState" label="计划状态">
-                  <template #default="scope">
+                <el-table-column prop="programState" label="计划状态">
+                    <template #default="scope">
                         <el-tag :type="
-                                scope.row.progromState === '未使用'
-                                    ? 'success'
-                                    : scope.row.progromState === '使用中'
+                            scope.row.programState === '未使用'
+                                ? 'success'
+                                : scope.row.programState === '已发布'
                                     ? 'danger'
                                     : ''
-                            ">{{ scope.row.progromState }}</el-tag>
+                        ">{{ scope.row.programState }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="author" label="作者"></el-table-column>
-                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                <el-table-column prop="updateDate" label="更新时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
-                      <el-button type="text" @click="viewImage(scope.$index, scope.row)">预览</el-button>
-                      <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">修改
+                        <el-button type="text" @click="viewImage(scope.$index, scope.row)">预览</el-button>
+                        <el-button type="text" @click="handleEdit(scope.$index, scope.row)">修改
                         </el-button>
-                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">复制
-                        </el-button>
-                        <el-button type="text"  class="red"
+                        <!-- <el-button type="text"  class="red"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">加密下载
-                        </el-button>
-                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">发布
+                        </el-button> -->
+                        <el-button type="text" @click="handlePub(scope.$index, scope.row)">发布
                         </el-button>
                     </template>
                 </el-table-column>
@@ -132,12 +129,8 @@
                 </span>
             </template>
         </el-dialog>
-         <el-dialog
-            v-model="dialogVisible"
-            title="新建节目"
-            width="40%"
-          >
-              <el-form label-width="70px">
+        <el-dialog v-model="dialogVisible" title="新建节目" width="40%">
+            <el-form label-width="70px">
                 <el-form-item label="名称：">
                     <el-input v-model="form1.programName"></el-input>
                 </el-form-item>
@@ -147,25 +140,24 @@
                         <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
                     </el-select>
                 </el-form-item>
-                  <el-form-item label="时长：">
-                        <el-input-number v-model="num" :min="1" :max="60" @change="handleChange" />
-                  </el-form-item>
+                <el-form-item label="时长：">
+                    <el-input-number v-model="num" :min="1" :max="60" @change="handleChange" />
+                </el-form-item>
             </el-form>
             <template #footer>
-              <span class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="addProgram()">确定</el-button
-                >
-              </span>
+                <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="addProgram()">确定</el-button>
+                </span>
             </template>
-          </el-dialog>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData } from "../api/index";
+import { ProgramData } from "../api/index";
 import { useRouter } from "vue-router";
 export default {
     name: "basetable",
@@ -176,47 +168,49 @@ export default {
             // pageIndex: 1,
             // pageSize: 10,
 
-            
+
         });
         const data = reactive({
-          showPL:true
+            showPL: true
         })
         const route = new useRouter()
-        const tableData = reactive([
-          {
-            showViewer:false,
-            thumb:["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
-            programName:"1324564",
-            programState:"待发布",
-            playMode:"按时段播放",
-            programDuration:"1",
-            playDate:"2022-06-29",
-            playTactics:"替换",
-            author:"jx",
-            checker:"jiejie",
-            updateTime:"boom"
-          },
-           {
-            showViewer:false,
-            thumb:["https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"],
-            programName:"1324564",
-            programState:"待发布",
-            playMode:"按时段播放",
-            programDuration:"1",
-            playDate:"2022-06-29",
-            playTactics:"替换",
-            author:"jx",
-            checker:"jiejie",
-            updateTime:"boom"
-          }
+        const tableData = ref([
+            {
+                showViewer: false,
+                programMaterial: ["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
+                programName: "1324564",
+                resolution: "1",
+                programState: "未使用",
+                programSize: "待发布",
+                duration: "1",
+                author: "jx",
+                updateDate: "boom"
+            },
+            {
+                showViewer: false,
+                programMaterial: ["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
+                programName: "1324564",
+                resolution: "1",
+                programState: "已发布",
+                programSize: "待发布",
+                duration: "1",
+                author: "jx",
+                updateDate: "boom"
+            }
         ]);
         const pageTotal = ref(0);
         // 获取表格数据
         const getData = () => {
-            fetchData(query).then((res) => {
-                console.log(res.data)
-                // tableData.value = res.list;
-                // pageTotal.value = res.pageTotal || 50;
+            ProgramData(query).then((res) => {
+
+                tableData.value = res.data.records;
+                // console.log(tableData.value[0])
+                pageTotal.value = res.data.records.length || 50;
+                for (var i = 0; i < res.data.records.length; i++) {
+                    tableData.value[i].programMaterial = '/api/imgs/' + tableData.value[i].programMaterial
+                }
+                // tableData[0].programMaterial = '/api/imgs/' + tableData[0].programMaterial
+
             });
         };
         getData();
@@ -242,7 +236,7 @@ export default {
                     ElMessage.success("删除成功");
                     tableData.value.splice(index, 1);
                 })
-                .catch(() => {});
+                .catch(() => { });
         };
 
         // 表格编辑时弹窗和保存
@@ -255,38 +249,38 @@ export default {
         const dialogVisible = ref(false)
         let form = reactive({
             showViewer: false,
-            thumb:[],
-            programName:"",
-            resolutionRatio:"",           
-            programState:"",
-            programDuration:"1",
-            playMode:"",
-            playDate:"",
-            playTactics:"sfsf",
-            synchronous:"",
-            loopType:"",
-            loopTime:"",
-            author:"",
-            checker:"",
-            updateTime:""
+            thumb: [],
+            programName: "",
+            resolutionRatio: "",
+            programState: "",
+            programDuration: "1",
+            playMode: "",
+            playDate: "",
+            playTactics: "sfsf",
+            synchronous: "",
+            loopType: "",
+            loopTime: "",
+            author: "",
+            checker: "",
+            updateTime: ""
 
         });
         let form1 = reactive({
             showViewer: false,
-            thumb:[],
-            programName:"",
-            resolutionRatio:"",   
-            programDuration:"1",        
-            programState:"",
-            playMode:"",
-            playDate:"",
-            playTactics:"sfsf",
-            synchronous:"",
-            loopType:"",
-            loopTime:"",
-            author:"",
-            checker:"",
-            updateTime:""
+            thumb: [],
+            programName: "",
+            resolutionRatio: "",
+            programDuration: "1",
+            programState: "",
+            playMode: "",
+            playDate: "",
+            playTactics: "sfsf",
+            synchronous: "",
+            loopType: "",
+            loopTime: "",
+            author: "",
+            checker: "",
+            updateTime: ""
 
         });
         // const handleImg = (index,row) =>{
@@ -304,7 +298,7 @@ export default {
             editVisible.value = true;
         };
         const handleCreate = () => {
-           
+
             createVisible.value = true;
             console.log(createVisible.value)
         };
@@ -315,30 +309,37 @@ export default {
                 tableData.value[idx][item] = form[item];
             });
         };
-        const viewImage = (index,row) => {
-          row.showViewer = true
-          // data.showViewer = true;
-         
+        const viewImage = (index, row) => {
+            row.showViewer = true
+            // data.showViewer = true;
+
 
         }
-        const closeViewer = (index,row) => {
-        //  data.showViewer = false
-         row.showViewer = false
+        const closeViewer = (index, row) => {
+            //  data.showViewer = false
+            row.showViewer = false
         }
 
         const addProgram = () => {
-          console.log(form1)
-          route.push({
-            path:'/programadd',
-            query:{name:form1.programName,resolution:form1.resolutionRatio,duration:form1.programDuration}
-          })
-          dialogVisible.value = false
-        }
+            // console.log(form1)
+            if (form1.programName === '' || form1.resolutionRatio === '') {
+                ElMessage.error('节目内容填写不完整')
+            } else {
+                route.push({
+                    path: '/programadd',
+                    query: { name: form1.programName, resolution: form1.resolutionRatio, duration: form1.programDuration }
+                })
+                dialogVisible.value = false
+            }
 
+        }
+        const handlePub=(index,row)=>{
+            console.log(row)
+        }
         const num = ref(1)
         const handleChange = () => {
-          form1.programDuration = num.value
-          console.log(num.value)
+            form1.programDuration = num.value
+            console.log(num.value)
         }
 
         return {
@@ -362,30 +363,32 @@ export default {
             closeViewer,
             saveEdit,
             handleCreate,
-            addProgram
+            addProgram,
+            handlePub
         };
     },
 };
 </script>
 
 <style scoped>
-
 .pgInfo {
-margin-left: 70px; 
-margin-top: -13px;
-height: 150px;
-border: 1px solid black;
+    margin-left: 70px;
+    margin-top: -13px;
+    height: 150px;
+    border: 1px solid black;
 }
+
 .backBtn {
-  margin-top: 10px;
-  margin-left: 700px;
+    margin-top: 10px;
+    margin-left: 700px;
 }
+
 .handle-box {
     margin-bottom: 20px;
 }
-.op2 {
- 
-}
+
+.op2 {}
+
 .handle-select {
     width: 130px;
 }
@@ -394,22 +397,26 @@ border: 1px solid black;
     width: 130px;
     display: inline-block;
 }
+
 .table {
-  margin-top: 10px;
+    margin-top: 10px;
     width: 100%;
     font-size: 14px;
 }
+
 .red {
     color: #ff0000;
 }
+
 .mr10 {
     margin-right: 10px;
 }
+
 .table-td-thumb {
     display: block;
-    
+
     /* margin: auto; */
-     margin: 30px 0 0 30px;
+    margin: 30px 0 0 30px;
     padding: 5px;
     width: 60px;
     height: 60px;
