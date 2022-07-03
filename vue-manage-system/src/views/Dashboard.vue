@@ -171,12 +171,20 @@
 
 <script>
 import Schart from "vue-schart";
-import { reactive,ref } from "vue";
-import { fetchData, userAdd, userEdit } from "../api/index";
+import { onMounted, reactive,ref } from "vue";
+import { MachineData, ProgramData, userEdit } from "../api/index";
 export default {
   name: "dashboard",
   components: { Schart },
   setup() {
+    onMounted(()=>{
+      ProgramData().then((res) => {
+                var list = res.data
+                // console.log(list.records)
+                // tableData.value = list.records;
+                num_p.value = list.records.length || 2;
+            })
+        })
     let num_p = ref("321");
     let num_plan =ref("321") ;
     let num_m = ref("321");
@@ -188,12 +196,13 @@ export default {
     let ship = "10";
     let music = "20";
     const getData = () => {
-            // fetchData().then((res) => {
-            //     var list = res.data
-            //     // console.log(list.records)
-            //     tableData.value = list.records;
-            //     pageTotal.value = list.records.length || 50;
-            // });
+            MachineData().then((res) => {
+                var list = res.data
+                // console.log(list.records)
+                // tableData.value = list.records;
+                num_m.value = list.records.length || 2;
+            });
+            
         };
         getData();
     const name = localStorage.getItem("ms_username");

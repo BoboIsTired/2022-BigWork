@@ -94,15 +94,16 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" v-model="editVisible" width="30%">
             <el-form label-width="70px">
-                <el-form-item label="账户名">
+                <el-form-item label="节目名称">
                     <el-input v-model="form.programName"></el-input>
                 </el-form-item>
                 <el-form-item label="分辨率">
-                    <el-select v-model="form.organization" placeholder="所属机构" class="handle-select mr10">
-                        <el-option key="1" label="广东省" value="广东省"></el-option>
+                    <el-select v-model="form.resolution" placeholder="分辨率" class="handle-select mr10">
+                        <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
+                        <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="所属角色">
+                <!-- <el-form-item label="节目时长">
                     <el-select v-model="form.role" placeholder="所属角色" class="handle-select mr10">
                         <el-option key="1" label="广东省" value="广东省"></el-option>
                     </el-select>
@@ -120,7 +121,7 @@
                 </el-form-item>
                 <el-form-item label="手机号">
                     <el-input v-model="form.phoneNumber"></el-input>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
@@ -163,10 +164,6 @@ export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            // address: "",
-            // name: "",
-            // pageIndex: 1,
-            // pageSize: 10,
 
 
         });
@@ -248,21 +245,14 @@ export default {
 
         const dialogVisible = ref(false)
         let form = reactive({
-            showViewer: false,
-            thumb: [],
-            programName: "",
-            resolutionRatio: "",
-            programState: "",
-            programDuration: "1",
-            playMode: "",
-            playDate: "",
-            playTactics: "sfsf",
-            synchronous: "",
-            loopType: "",
-            loopTime: "",
-            author: "",
-            checker: "",
-            updateTime: ""
+            programMaterial: ["https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"],
+            programName: "1324564",
+            resolution: "1",
+            programState: "未使用",
+            programSize: "待发布",
+            duration: "1",
+            author: "jx",
+            updateDate: "boom"
 
         });
         let form1 = reactive({
@@ -283,12 +273,6 @@ export default {
             updateTime: ""
 
         });
-        // const handleImg = (index,row) =>{
-        //   Object.keys(form).forEach((item) => {
-        //         form[item] = row[item];
-        //     });
-        //   visible.value = true
-        // }
         let idx = -1;
         const handleEdit = (index, row) => {
             idx = index;
@@ -305,9 +289,9 @@ export default {
         const saveEdit = () => {
             editVisible.value = false;
             ElMessage.success(`修改第 ${idx + 1} 行成功`);
-            Object.keys(form).forEach((item) => {
-                tableData.value[idx][item] = form[item];
-            });
+            // Object.keys(form).forEach((item) => {
+            //     tableData.value[idx][item] = form[item];
+            // });
         };
         const viewImage = (index, row) => {
             row.showViewer = true
@@ -333,7 +317,7 @@ export default {
             }
 
         }
-        const handlePub=(index,row)=>{
+        const handlePub = (index, row) => {
             console.log(row)
         }
         const num = ref(1)
