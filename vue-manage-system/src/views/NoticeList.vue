@@ -11,7 +11,10 @@
               <el-option key="2" label="中" value="中"></el-option>
               <el-option key="2" label="下" value="下"></el-option>
             </el-select>
-            
+            <br>
+            <br>
+          <label style="color:black;padding-right: 10px;width:160px;">文字大小:</label>
+           <el-slider v-model="content.size" @input="sizecg()"></el-slider>
     </div>
   </div>
   <div class="sub" >
@@ -52,7 +55,8 @@ export default {
       },
       content:{
         a:'文字位置',
-        uppos:'30px',
+        size:'',
+        uppos:'40px',
         midpos:"260px",
         downpos:"500px"
       }
@@ -78,6 +82,11 @@ export default {
       // console.log(cnt.style.marginTop)
       // document.getElementById("mar").style.marginTop = this.content.pos
     }, 
+    sizecg() {
+      var cnt = document.getElementById('mar')
+      console.log(this.content.size)
+      cnt.style.fontSize = this.content.size +'px'
+    },
     back() {
       // this.$router.push({path: '/ ',})
     },
@@ -175,7 +184,8 @@ export default {
   margin-top: 1.25%; */
   /* position: fixed;
   z-index: 10; */
-  margin-top: 30px;
+  margin-top: 40px;
+  font-size: 1px;
  
   /* margin-top: v-bind('content.pos'); */
 }
@@ -193,6 +203,7 @@ export default {
   color: white;
   margin-left: 2.5%;
   margin-top: 1.25%;
+  /* font-size: 100px; */
 }
 .back{
   margin-left: 20%;
