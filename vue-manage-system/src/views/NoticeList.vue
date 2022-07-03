@@ -15,6 +15,12 @@
             <br>
           <label style="color:black;padding-right: 10px;width:160px;">文字大小:</label>
            <el-slider v-model="content.size" @input="sizecg()"></el-slider>
+            <br>
+            <br>
+          <label style="color:black;padding-right: 10px;width:160px;">字体颜色:(r,g,b)</label>
+           <el-slider v-model="content.r" max="255" @input="colorcg()"></el-slider>
+           <el-slider v-model="content.g" max="255" @input="colorcg()"></el-slider>
+           <el-slider v-model="content.b" max="255" @input="colorcg()"></el-slider>
     </div>
   </div>
   <div class="sub" >
@@ -56,6 +62,9 @@ export default {
       content:{
         a:'文字位置',
         size:'',
+        r:255,
+        g:255,
+        b:255,
         uppos:'40px',
         midpos:"260px",
         downpos:"500px"
@@ -84,8 +93,17 @@ export default {
     }, 
     sizecg() {
       var cnt = document.getElementById('mar')
-      console.log(this.content.size)
+      // console.log(this.content.size)
       cnt.style.fontSize = this.content.size +'px'
+    },
+    colorcg(){
+      var cnt = document.getElementById('mar')
+      // console.log(this.content.r)
+      // console.log(this.content.g)
+      // console.log(this.content.b)
+      var string = 'rgb(' + this.content.r + ',' + this.content.g +',' + this.content.b + ')'
+      console.log(string) 
+      cnt.style.color = string
     },
     back() {
       // this.$router.push({path: '/ ',})
