@@ -120,3 +120,13 @@ export const NoticeCreate = query => {
         
     });
 };
+export const imgPub = query => {
+        // console.log(query)
+        return request({
+            // url: './table.json',
+            url: '/android/operation',
+            method: 'post',
+            data:query
+            
+        });
+    };

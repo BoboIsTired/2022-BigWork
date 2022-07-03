@@ -159,13 +159,14 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { ProgramData } from "../api/index";
+import { ProgramData, imgPub } from "../api/index";
 import { useRouter } from "vue-router";
 export default {
     name: "basetable",
     setup() {
         const query = reactive({
-
+            msg: "",
+            codeId: '1'
 
         });
         const data = reactive({
@@ -319,8 +320,19 @@ export default {
 
         }
         const handlePub = (index, row) => {
-            var urlPub=row.programMaterial.slice(4)
-            console.log(urlPub)
+            query.msg = row.programMaterial.slice(4)
+            query.msg = 'http://192.168.123.21:3000' + query.msg
+            imgPub(query).then((res) => {
+                console.log(res)
+                if(res!='failed'){
+                    ElMessage.success('发布成功！')
+                }else{
+                    ElMessage.error('发布失败！')
+                }
+                
+                
+            })
+
         }
         const num = ref(1)
         const handleChange = () => {
