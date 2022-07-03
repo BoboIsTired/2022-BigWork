@@ -100,3 +100,13 @@ export const MaterialCreate = query => {
         
     });
 };
+export const NoticeData = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/notice',
+        method: 'get',
+        params: query
+        
+    });
+};

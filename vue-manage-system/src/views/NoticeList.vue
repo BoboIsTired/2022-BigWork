@@ -1,232 +1,366 @@
 <template>
-  <div class="notice">
-    <div class="noticeTop">
-      <marquee id="mar" class="marquee" behavior="scroll" direction="left">{{ msg }}</marquee>
-      <!-- <img src="../assets/img/bg.png"> -->
+    <div>
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>
+                    <i class="el-icon-lx-cascades"></i>节目制作与发布/发布公告
+                </el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="container">
+            <div class="handle-box">
+                <!-- <div class="query"> -->
+                <!-- <span>节目名称：</span>
+                <el-input v-model="query.name" size="small" placeholder="请输入节目名称" class="handle-input mr10"></el-input> -->
+                <!-- </div> -->
+                <!-- <el-input v-model="query.name" placeholder="请输入账户名称" class="handle-input mr10"></el-input> -->
+                <!-- <span>分辨率：</span>
+                <el-select v-model="query.address" placeholder="公告状态" class="handle-select mr10">
+                    <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
+                    <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
+                </el-select> -->
+                <span>公告状态：</span>
+                <el-select v-model="query.address" placeholder="公告状态" class="handle-select mr10">
+                    <el-option key="1" label="未使用" value="未使用"></el-option>
+                    <el-option key="2" label="已发布" value="已发布"></el-option>
+                </el-select>
+
+                <el-button @click="handleSearch">重置</el-button>
+                <el-button type="primary" @click="handleSearch">查询</el-button>
+            </div>
+            <div class="op2">
+                <div v-if="data.showPL" class="btng1">
+                    <el-button type="primary" @click="addNotice()" >新建公告</el-button>
+                    <!-- <el-button @click="handleSearch" style="margin-left:30px" disabled>批量发布</el-button>
+                <el-button @click="handleCreate" style="margin-left:30px" disabled>批量删除</el-button> -->
+                </div>
+                <div v-else class="btng2">
+                    <el-button type="primary" @click="addNotice()" >新建公告</el-button>
+                    <!-- <el-button type="primary" @click="handleSearch" style="margin-left:30px">批量发布</el-button>
+                    <el-button type="primary" @click="handleCreate" style="margin-left:30px">批量删除</el-button> -->
+                </div>
+
+            </div>
+            <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
+                <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
+                <el-table-column type="selection"></el-table-column>
+                <el-table-column prop="noticeTitle" label="公告标题">
+                </el-table-column>
+                <el-table-column prop="body" label="公告内容"></el-table-column>
+                <!-- <el-table-column prop="resolution" label="分辨率"></el-table-column>
+                <el-table-column prop="duration" label="节目时长"></el-table-column>
+                <el-table-column prop="programSize" label="节目大小"></el-table-column> -->
+                <!-- <el-table-column prop="programState" label="公告状态">
+                    <template #default="scope">
+                        <el-tag :type="
+                            scope.row.programState === '未使用'
+                                ? 'success'
+                                : scope.row.programState === '已发布'
+                                    ? 'danger'
+                                    : ''
+                        ">{{ scope.row.programState }}</el-tag>
+                    </template>
+                </el-table-column> -->
+                <el-table-column prop="author" label="作者"></el-table-column>
+                <el-table-column prop="startTime" label="创建时间"></el-table-column>
+                <el-table-column label="操作" width="180" align="center">
+                    <template #default="scope">
+                        <el-button type="text" @click="handleImg(scope.$index, scope.row)">详情</el-button>
+                        <!-- <el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑
+                        </el-button> -->
+                        <!-- <el-button type="text"  class="red"
+                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">加密下载
+                        </el-button> -->
+                        <!-- <el-button type="text" class="red" @click="handlePub(scope.$index, scope.row)">删除
+                        </el-button> -->
+                        <el-button type="text" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination">
+                <el-pagination background layout="total, prev, pager, next" :current-page="query.pageIndex"
+                    :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
+            </div>
+        </div>
+        <el-dialog :data="tableData" v-model="visible" :show-close="false">
+            <template #default="scope">
+                <div class="my-header">
+                    <el-tabs type="border-card">
+                        <el-tab-pane label="公告详情">
+                            <div class="detail">
+                                <el-row>
+                                    <el-col :span="24">标题：{{ form.noticeTitle }}</el-col>
+                                    <el-col :span="24">公告内容：{{ form.body }}</el-col>
+                                    <el-col :span="24">字体大小：{{ form.fontSize }}</el-col>
+                                    <el-col :span="24">字体颜色：{{ form.fontColor }}</el-col>
+                                    <el-col :span="24">字体位置：{{ form.fontPosition }}</el-col>
+                                </el-row>
+                            </div>
+                        </el-tab-pane>
+                        
+                    </el-tabs>
+                    <div class="backBtn">
+                        <el-button type="primary" @click="visible = false">返回</el-button>
+                    </div>
+
+                </div>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="dialogVisible" title="新建节目" width="40%">
+            <el-form label-width="70px">
+                <el-form-item label="名称：">
+                    <el-input v-model="form1.programName"></el-input>
+                </el-form-item>
+                <el-form-item label="分辨率：">
+                    <el-select v-model="form1.resolutionRatio" placeholder="分辨率" class="handle-select mr10">
+                        <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
+                        <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时长：">
+                    <el-input-number v-model="num" :min="1" :max="60" @change="handleChange" />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="addProgram()">确定</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
-    <div class="edit">
-          <label style="color:black;padding-right: 10px;width:160px;">文字位置:</label>
-            <el-select v-model="content.a" placeholder="文字位置"  @change="poscg()" >
-              <el-option key="1" label="上" value="上"></el-option>
-              <el-option key="2" label="中" value="中"></el-option>
-              <el-option key="2" label="下" value="下"></el-option>
-            </el-select>
-            <br>
-            <br>
-          <label style="color:black;padding-right: 10px;width:160px;">文字大小:</label>
-           <el-slider v-model="content.size" @input="sizecg()"></el-slider>
-            <br>
-            <br>
-          <label style="color:black;padding-right: 10px;width:160px;">字体颜色:(r,g,b)</label>
-           <el-slider v-model="content.r" max="255" @input="colorcg()"></el-slider>
-           <el-slider v-model="content.g" max="255" @input="colorcg()"></el-slider>
-           <el-slider v-model="content.b" max="255" @input="colorcg()"></el-slider>
-    </div>
-  </div>
-  <div class="sub" >
-     <div class="input">
-       <el-input
-        type="textarea"
-        clear="text"
-        id="text"
-        :rows="5"
-        placeholder="请输入内容"
-        v-model="msg">
-      </el-input>
-    </div>   
-    <el-button @click="back" class="back">取消</el-button>
-    <el-button @click="submit" class="submit" type="primary">提交</el-button>
-  </div>
 </template>
 
 <script>
+import { ref, reactive } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { NoticeData } from "../api/index";
+import { useRouter } from "vue-router";
 export default {
-  data() {
-    return{
-      msg: '',
-      no: '',
-      formLabelAlign: {
-        notice: '',
-        startTime: '',
-        state: '',
-        author: '',
-        createTime: ''
-      },
-      formNotice: {
-        no: '',
-        notice: '',
-        startTime: '',
-        state: '',
-        author: '',
-      },
-      content:{
-        a:'文字位置',
-        size:'',
-        r:255,
-        g:255,
-        b:255,
-        uppos:'40px',
-        midpos:"260px",
-        downpos:"500px"
-      }
-    }
-  },
-  mounted: function () {
-    this.msg = this.$route.params.notice
-    this.no = this.$route.params.no
-  },
-  methods: {
-    poscg(){
-      // console.log('sdsadasdasdad')
-      // console.log(document.getElementById("mar").style.marginTop)
-      var cnt = document.getElementById('mar')
-      if(this.content.a == '上'){
-        cnt.style.marginTop = this.content.uppos
-      }else if(this.content.a == '中'){
-        cnt.style.marginTop = this.content.midpos
-      }else {
-        cnt.style.marginTop = this.content.downpos
-      }
-      
-      // console.log(cnt.style.marginTop)
-      // document.getElementById("mar").style.marginTop = this.content.pos
-    }, 
-    sizecg() {
-      var cnt = document.getElementById('mar')
-      // console.log(this.content.size)
-      cnt.style.fontSize = this.content.size +'px'
+    name: "basetable",
+    setup() {
+        const query = reactive({
+
+
+        });
+        const data = reactive({
+            showPL: true
+        })
+        const route = new useRouter()
+        const tableData = ref([
+            {
+                noticeTitle: "123",
+                body:"123",
+                fontSize: "12",
+                fontColor: "red",
+                fontPosition: "1",
+                author: "jx",
+                startTime: ""
+            }
+        ]);
+        const pageTotal = ref(0);
+        // 获取表格数据
+        const getData = () => {
+            NoticeData(query).then((res) => {
+
+                tableData.value = res.data.records;
+                // console.log(tableData.value[0])
+                pageTotal.value = res.data.records.length || 50;
+                // for (var i = 0; i < res.data.records.length; i++) {
+                //     tableData.value[i].programMaterial = '/api/imgs/' + tableData.value[i].programMaterial
+                // }
+                // tableData[0].programMaterial = '/api/imgs/' + tableData[0].programMaterial
+
+            });
+        };
+        getData();
+
+        // 查询操作
+        const handleSearch = () => {
+            query.pageIndex = 1;
+            getData();
+        };
+        // 分页导航
+        const handlePageChange = (val) => {
+            query.pageIndex = val;
+            getData();
+        };
+
+        // 删除操作
+        const handleDelete = (index) => {
+            // 二次确认删除
+            ElMessageBox.confirm("确定要删除吗？", "提示", {
+                type: "warning",
+            })
+                .then(() => {
+                    ElMessage.success("删除成功");
+                    tableData.value.splice(index, 1);
+                })
+                .catch(() => { });
+        };
+
+        // 表格编辑时弹窗和保存
+        const editVisible = ref(false);
+        //新建账户弹窗和保存
+        const createVisible = ref(false);
+        //节目详情
+        const visible = ref(false)
+
+        const dialogVisible = ref(false)
+        let form = reactive({
+            noticeTitle: "123",
+                body:"123",
+                fontSize: "12",
+                fontColor: "red",
+                fontPosition: "1",
+                author: "jx",
+                startTime: ""
+
+        });
+        let form1 = reactive({
+            noticeTitle: "123",
+                body:"123",
+                fontSize: "12",
+                fontColor: "red",
+                fontPosition: "1",
+                author: "jx",
+                startTime: ""
+
+        });
+        let idx = -1;
+        const handleEdit = (index, row) => {
+            idx = index;
+            Object.keys(form).forEach((item) => {
+                form[item] = row[item];
+            });
+            editVisible.value = true;
+        };
+        const handleCreate = () => {
+
+            createVisible.value = true;
+            console.log(createVisible.value)
+        };
+        const saveEdit = () => {
+            editVisible.value = false;
+            ElMessage.success(`修改第 ${idx + 1} 行成功`);
+            // Object.keys(form).forEach((item) => {
+            //     tableData.value[idx][item] = form[item];
+            // });
+        };
+        const viewImage = (index, row) => {
+            row.showViewer = true
+            // data.showViewer = true;
+
+
+        }
+        const closeViewer = (index, row) => {
+            //  data.showViewer = false
+            row.showViewer = false
+        }
+
+        const addNotice = () => {
+
+                route.push({
+                    path: '/noticeadd'
+                })
+
+            
+
+        }
+        const handlePub = (index, row) => {
+            console.log(row)
+        }
+        const num = ref(1)
+        const handleChange = () => {
+            form1.programDuration = num.value
+            console.log(num.value)
+        }
+        const handleImg = (index, row) => {
+            Object.keys(form).forEach((item) => {
+                form[item] = row[item];
+            });
+            visible.value = true
+        }
+
+        return {
+            query,
+            tableData,
+            pageTotal,
+            editVisible,
+            createVisible,
+            dialogVisible,
+            form,
+            form1,
+            visible,
+            data,
+            num,
+            handleChange,
+            handleSearch,
+            handlePageChange,
+            handleDelete,
+            handleEdit,
+            viewImage,
+            closeViewer,
+            saveEdit,
+            handleCreate,
+            addNotice,
+            handlePub,
+            handleImg
+        };
     },
-    colorcg(){
-      var cnt = document.getElementById('mar')
-      // console.log(this.content.r)
-      // console.log(this.content.g)
-      // console.log(this.content.b)
-      var string = 'rgb(' + this.content.r + ',' + this.content.g +',' + this.content.b + ')'
-      console.log(string) 
-      cnt.style.color = string
-    },
-    back() {
-      // this.$router.push({path: '/ ',})
-    },
-    submit() {
-      // var date = new Date()
-      // let year = date.getFullYear();
-      // var month = date.getMonth() + 1;
-      // var dat = date.getDate();
-      // var hour = date.getHours();
-      // var minutes = date.getMinutes();
-      // var second = date.getSeconds();
-      // var timer = year + '-' + month + '-' + dat + ' ' + hour + ':' + minutes + ':' + second;
-      // this.formLabelAlign.notice=this.msg
-      // this.formLabelAlign.createTime=timer
-      // this.formLabelAlign.state='发布中'
-      // this.formLabelAlign.author=this.$cookies.get("cname")
-      // this.formLabelAlign.startTime='-',
-      // this.formNotice.no=this.no,
-      // this.formNotice.notice=this.msg,
-      // this.formNotice.state='发布中',
-      // this.formNotice.author=this.$cookies.get("cname"),
-      // this.formNotice.startTime='-'
-      // if(this.no != null){
-      //   this.$axios({
-      //     url: `/api/notice`,
-      //     method: 'put',
-      //     data: {
-      //       ...this.formNotice
-      //     }
-      //   }).then(res => {
-      //     if(res.data.code == 200) {
-      //       this.$message({
-      //         message: '数据添加成功',
-      //         type: 'success'
-      //       })
-      //       this.$router.push({path: '/noticeList'})
-      //     }
-      //   })
-      // }else{
-      //   this.$axios({
-      //     url: `/api/notice`,
-      //     method: 'post',
-      //     data: {
-      //       ...this.formLabelAlign
-      //     }
-      //   }).then(res => {
-      //     if(res.data.code == 200) {
-      //       this.$message({
-      //         message: '数据添加成功',
-      //         type: 'success'
-      //       })
-      //       this.$router.push({path: '/noticeList'})
-      //     }
-      //   })
-      // }
-    }
-  }
-}
+};
 </script>
 
-<style>
-.notice{
-  /* padding: 0px 2%px; */
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  height: 80%;
-  margin: 0;
-  /* position:relative; */
-  /* margin-left: 2%; */
+<style scoped>
+.pgInfo {
+    margin-left: 70px;
+    margin-top: -13px;
+    height: 150px;
+    border: 1px solid black;
 }
-.noticeTop {
-  /* width: 1439px;
-  height: 850px; */
-  width: 80%;
-  /* position: relative; */
-  /* margin-left: 1.8%;
-  margin-top: 1.25%; */
-  background-image:url('../assets/img/bg.png');
-  /* background-size: contain; */
-   background-size: 100% 100%;
-  background-repeat: no-repeat;
-  /* padding-bottom: 47.27%; */
-  /* position: fixed;
-  z-index: 10; */
+
+.backBtn {
+    margin-top: 10px;
+    margin-left: 700px;
 }
-.edit {
-   margin-left: 20px;
+
+.handle-box {
+    margin-bottom: 20px;
 }
-.marquee {
-  color:white;
-  width: 100%;
-  /* position: relative; */
-  /* margin-left: 1.8%;
-  margin-top: 1.25%; */
-  /* position: fixed;
-  z-index: 10; */
-  margin-top: 40px;
-  font-size: 1px;
- 
-  /* margin-top: v-bind('content.pos'); */
+
+.op2 {}
+
+.handle-select {
+    width: 130px;
 }
-.sub {
-  height: 20%;
-  /* margin-top: 80px; */
-  /* position:absolute;
-  bottom:0px; */
+
+.handle-input {
+    width: 130px;
+    display: inline-block;
 }
-#text{
-  width: 71.8%;
-  /* margin-top: 1%; */
-  background-color: #292d3e;
-  border-color: #292d3e;
-  color: white;
-  margin-left: 2.5%;
-  margin-top: 1.25%;
-  /* font-size: 100px; */
+
+.table {
+    margin-top: 10px;
+    width: 100%;
+    font-size: 14px;
 }
-.back{
-  margin-left: 20%;
+
+.red {
+    color: #ff0000;
 }
-img{
-    width: 70%;
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.table-td-thumb {
+    display: block;
+
+    /* margin: auto; */
+    margin: 30px 0 0 30px;
+    padding: 5px;
+    width: 60px;
+    height: 60px;
 }
 </style>

@@ -54,6 +54,13 @@ const routes = [{
       },
       component: () => import( /* webpackChunkName: "table" */ "../views/NoticeList.vue")
     }, {
+      path: "/noticeadd",
+      name: "noticeadd",
+      meta: {
+        title: '新建公告'
+      },
+      component: () => import( /* webpackChunkName: "login" */ "../views/NoticeAdd.vue")
+    },{
       path: "/tablePlan",
       name: "basetablePlan",
       meta: {

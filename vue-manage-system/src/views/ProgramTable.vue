@@ -82,6 +82,7 @@
                         </el-button> -->
                         <el-button type="text" @click="handlePub(scope.$index, scope.row)">发布
                         </el-button>
+                        <el-button type="text" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
