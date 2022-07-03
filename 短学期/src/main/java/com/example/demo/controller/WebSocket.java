@@ -1,69 +1,83 @@
 package com.example.demo.controller;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * @ServerEndPoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端，
- * 注解的值将被用于监听用户连接的终端访问URL地址，客户端可以通过这个URL连接到websocket服务器端
- */
-@ServerEndpoint("/websocket")
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+
+@ServerEndpoint("/websocket/{vmcNo}") // 客户端URI访问的路径
 @Component
 public class WebSocket {
-    private static int onlineCount=0;
-    private static CopyOnWriteArrayList<WebSocket> webSocketSet=new CopyOnWriteArrayList<WebSocket>();
-    private Session session;
+    /** 保存所有连接的webSocket实体
+     * CopyOnWriteArrayList使用了一种叫写时复制的方法，
+     * 当有新元素添加到CopyOnWriteArrayList时，
+     * 先从原有的数组中拷贝一份出来，然后在新的数组做写操作，
+     * 写完之后，再将原来的数组引用指向到新数组。
+     * 具备线程安全，并且适用于高并发场景
+     */
+    private static CopyOnWriteArrayList<WebSocket> sWebSocketServers = new CopyOnWriteArrayList<>();
+    private Session mSession; // 与客户端连接的会话，用于发送数据
+    private long mVmcNo; // 客户端的标识(这里以机器编号)
+    private Log mLog = LogFactory.getLog(WebSocket.class);
 
     @OnOpen
-    public void onOpen(Session session){
-        this.session=session;
-        webSocketSet.add(this);//加入set中
-        addOnlineCount();
-        System.out.println("有新连接加入！当前在线人数为"+getOnlineCount());
+    public void onOpen(Session session, @PathParam("vmcNo") long vmcNo){
+        mSession = session;
+        sWebSocketServers.add(this); // 将回话保存
+        mLog.info("-->onOpen new connect vmcNo is "+vmcNo);
+        mVmcNo = vmcNo;
     }
 
     @OnClose
     public void onClose(){
-        webSocketSet.remove(this);
-        subOnlineCount();
-        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+        sWebSocketServers.remove(this);
+        mLog.info("-->onClose a connect");
     }
 
     @OnMessage
-    public void onMessage(String message,Session session){
-        System.out.println("来自客户端的消息："+message);
-//        群发消息
-        for (WebSocket item:webSocketSet){
-            try {
-                item.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-                continue;
-            }
+    public void onMessage(String message, Session session){
+        mLog.info("-->onMessage "+message);
+// 这里选择的是让其他客户端都知道消息，类似于转发的聊天室，可根据使用场景使用
+        for (WebSocket socketServer : sWebSocketServers){
+            socketServer.sendMessage("i have rcv you message");
         }
     }
 
-    @OnError
-    public void onError(Session session,Throwable throwable){
-        System.out.println("发生错误！");
-        throwable.printStackTrace();
-    }
-    //   下面是自定义的一些方法
-    public void sendMessage(String message) throws IOException {
-        this.session.getBasicRemote().sendText(message);
+    /** 对外发送消息
+     * @param message
+     */
+    public boolean sendMessage(String message){
+        try {
+            mSession.getBasicRemote().sendText(message);
+        } catch (IOException e) {
+            mLog.info(e.toString());
+            return false;
+        }
+        return true;
     }
 
-    public static synchronized int getOnlineCount(){
-        return onlineCount;
-    }
-    public static synchronized void addOnlineCount(){
-        WebSocket.onlineCount++;
-    }
-    public static synchronized void subOnlineCount(){
-        WebSocket.onlineCount--;
+    /** 对某个机器发送消息
+     * @param message
+     * @param vmcNo 机器编号
+     * @return true,返回发送的消息,false，返回failed字符串
+     */
+    public static String sendMessage(String message, long vmcNo){
+        boolean success = false;
+        for (WebSocket server : sWebSocketServers){
+            if (server.mVmcNo == vmcNo){
+                success = server.sendMessage(message);
+                break;
+            }
+        }
+        return success ? message : "failed";
     }
 }
