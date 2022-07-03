@@ -110,3 +110,13 @@ export const NoticeData = query => {
         
     });
 };
+export const NoticeCreate = query => {
+    // console.log(query)
+    return request({
+        // url: './table.json',
+        url: '/notice',
+        method: 'post',
+        data:query
+        
+    });
+};

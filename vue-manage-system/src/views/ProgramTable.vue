@@ -319,7 +319,8 @@ export default {
 
         }
         const handlePub = (index, row) => {
-            console.log(row)
+            var urlPub=row.programMaterial.slice(4)
+            console.log(urlPub)
         }
         const num = ref(1)
         const handleChange = () => {

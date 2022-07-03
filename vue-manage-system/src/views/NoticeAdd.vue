@@ -5,67 +5,45 @@
       <!-- <img src="../assets/img/bg.png"> -->
     </div>
     <div class="edit">
-          <label style="color:black;padding-right: 10px;width:160px;">文字位置:</label>
-            <el-select v-model="content.a" placeholder="文字位置"  @change="poscg()" >
-              <el-option key="1" label="上" value="上"></el-option>
-              <el-option key="2" label="中" value="中"></el-option>
-              <el-option key="2" label="下" value="下"></el-option>
-            </el-select>
-            <br>
-            <br>
-          <label style="color:black;padding-right: 10px;width:160px;">文字大小:</label>
-           <el-slider v-model="content.size" @input="sizecg()"></el-slider>
-            <br>
-            <br>
-          <label style="color:black;padding-right: 10px;width:160px;">字体颜色:(r,g,b)</label>
-           <el-slider v-model="content.r" max="255" @input="colorcg()"></el-slider>
-           <el-slider v-model="content.g" max="255" @input="colorcg()"></el-slider>
-           <el-slider v-model="content.b" max="255" @input="colorcg()"></el-slider>
+      <label style="color:black;padding-right: 10px;width:160px;">文字位置:</label>
+      <el-select v-model="content.a" placeholder="文字位置" @change="poscg()">
+        <el-option key="1" label="上" value="上"></el-option>
+        <el-option key="2" label="中" value="中"></el-option>
+        <el-option key="2" label="下" value="下"></el-option>
+      </el-select>
+      <br>
+      <br>
+      <label style="color:black;padding-right: 10px;width:160px;">文字大小:</label>
+      <el-slider v-model="content.size" @input="sizecg()"></el-slider>
+      <br>
+      <br>
+      <label style="color:black;padding-right: 10px;width:160px;">字体颜色:(r,g,b)</label>
+      <el-slider v-model="content.r" max="255" @input="colorcg()"></el-slider>
+      <el-slider v-model="content.g" max="255" @input="colorcg()"></el-slider>
+      <el-slider v-model="content.b" max="255" @input="colorcg()"></el-slider>
     </div>
   </div>
-  <div class="sub" >
-     <div class="input">
-       <el-input
-        type="textarea"
-        clear="text"
-        id="text"
-        :rows="5"
-        placeholder="请输入内容"
-        v-model="msg">
+  <div class="sub">
+    <div class="input">
+      <el-input type="textarea" clear="text" id="text" :rows="5" placeholder="请输入内容" v-model="msg">
       </el-input>
-    </div>   
+    </div>
     <el-button @click="back" class="back">取消</el-button>
     <el-button @click="submit" class="submit" type="primary">提交</el-button>
   </div>
-  <!-- <el-dialog v-model="dialogVisible" title="新建节目" width="40%">
-            <el-form label-width="70px">
-                <el-form-item label="名称：">
-                    <el-input v-model="form1.programName"></el-input>
-                </el-form-item>
-                <el-form-item label="分辨率：">
-                    <el-select v-model="form1.resolutionRatio" placeholder="分辨率" class="handle-select mr10">
-                        <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
-                        <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="时长：">
-                    <el-input-number v-model="num" :min="1" :max="60" @change="handleChange" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="addProgram()">确定</el-button>
-                </span>
-            </template>
-        </el-dialog> -->
-        <div></div>
+  <div></div>
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+import router from "../router";
+import { NoticeCreate, MaterialCreate, userEdit } from "../api/index";
+import { ElMessage } from 'element-plus';
 export default {
+
   data() {
-    return{
+    const router = useRouter();
+    return {
       msg: '',
       no: '',
       formLabelAlign: {
@@ -82,15 +60,23 @@ export default {
         state: '',
         author: '',
       },
-      content:{
-        a:'文字位置',
-        size:'',
-        r:255,
-        g:255,
-        b:255,
-        uppos:'40px',
-        midpos:"260px",
-        downpos:"500px"
+      content: {
+        a: '文字位置',
+        size: '',
+        r: 255,
+        g: 255,
+        b: 255,
+        uppos: '40px',
+        midpos: "260px",
+        downpos: "500px"
+      },
+      noticeAdd: {
+        noticeTitle: router.currentRoute.value.query.noticeTitle,
+        fontColor: "",
+        fontSize: "0",
+        fontPosition: "",
+        body: "",
+        author:localStorage.getItem("ms_username")
       }
     }
   },
@@ -99,97 +85,64 @@ export default {
     this.no = this.$route.params.no
   },
   methods: {
-    poscg(){
+    poscg() {
       // console.log('sdsadasdasdad')
       // console.log(document.getElementById("mar").style.marginTop)
       var cnt = document.getElementById('mar')
-      if(this.content.a == '上'){
+      if (this.content.a == '上') {
         cnt.style.marginTop = this.content.uppos
-      }else if(this.content.a == '中'){
+      } else if (this.content.a == '中') {
         cnt.style.marginTop = this.content.midpos
-      }else {
+      } else {
         cnt.style.marginTop = this.content.downpos
       }
-      
+
       // console.log(cnt.style.marginTop)
       // document.getElementById("mar").style.marginTop = this.content.pos
-    }, 
+    },
     sizecg() {
       var cnt = document.getElementById('mar')
       // console.log(this.content.size)
-      cnt.style.fontSize = this.content.size +'px'
+      cnt.style.fontSize = this.content.size + 'px'
     },
-    colorcg(){
+    colorcg() {
       var cnt = document.getElementById('mar')
       // console.log(this.content.r)
       // console.log(this.content.g)
       // console.log(this.content.b)
-      var string = 'rgb(' + this.content.r + ',' + this.content.g +',' + this.content.b + ')'
-      console.log(string) 
+      var string = 'rgb(' + this.content.r + ',' + this.content.g + ',' + this.content.b + ')'
+      console.log(string)
       cnt.style.color = string
     },
     back() {
-      // this.$router.push({path: '/ ',})
+      this.msg = ""
     },
     submit() {
-      // var date = new Date()
-      // let year = date.getFullYear();
-      // var month = date.getMonth() + 1;
-      // var dat = date.getDate();
-      // var hour = date.getHours();
-      // var minutes = date.getMinutes();
-      // var second = date.getSeconds();
-      // var timer = year + '-' + month + '-' + dat + ' ' + hour + ':' + minutes + ':' + second;
-      // this.formLabelAlign.notice=this.msg
-      // this.formLabelAlign.createTime=timer
-      // this.formLabelAlign.state='发布中'
-      // this.formLabelAlign.author=this.$cookies.get("cname")
-      // this.formLabelAlign.startTime='-',
-      // this.formNotice.no=this.no,
-      // this.formNotice.notice=this.msg,
-      // this.formNotice.state='发布中',
-      // this.formNotice.author=this.$cookies.get("cname"),
-      // this.formNotice.startTime='-'
-      // if(this.no != null){
-      //   this.$axios({
-      //     url: `/api/notice`,
-      //     method: 'put',
-      //     data: {
-      //       ...this.formNotice
-      //     }
-      //   }).then(res => {
-      //     if(res.data.code == 200) {
-      //       this.$message({
-      //         message: '数据添加成功',
-      //         type: 'success'
-      //       })
-      //       this.$router.push({path: '/noticeList'})
-      //     }
-      //   })
-      // }else{
-      //   this.$axios({
-      //     url: `/api/notice`,
-      //     method: 'post',
-      //     data: {
-      //       ...this.formLabelAlign
-      //     }
-      //   }).then(res => {
-      //     if(res.data.code == 200) {
-      //       this.$message({
-      //         message: '数据添加成功',
-      //         type: 'success'
-      //       })
-      //       this.$router.push({path: '/noticeList'})
-      //     }
-      //   })
-      // }
+
+      this.noticeAdd.fontPosition = this.content.a
+      this.noticeAdd.fontSize = this.content.size
+      this.noticeAdd.body = this.msg
+      this.noticeAdd.fontColor = 'rgb(' + this.content.r + ',' + this.content.g + ',' + this.content.b + ')'
+      console.log(this.msg)
+      if (this.noticeAdd.fontPosition === '文字位置' || this.noticeAdd.fontSize === '' || this.noticeAdd.body === '' || this.noticeAdd.body === undefined) {
+        ElMessage.error('公告信息不完整')
+      } else {
+        NoticeCreate(this.noticeAdd).then((res) => {
+          console.log(res.msg)
+          if (res.msg === '成功') {
+            ElMessage.success('公告创建成功')
+          }
+
+        })
+
+      }
     }
   }
 }
 </script>
 
 <style>
-.notice{
+.notice {
   /* padding: 0px 2%px; */
   display: flex;
   justify-content: space-around;
@@ -199,6 +152,7 @@ export default {
   /* position:relative; */
   /* margin-left: 2%; */
 }
+
 .noticeTop {
   /* width: 1439px;
   height: 850px; */
@@ -206,19 +160,21 @@ export default {
   /* position: relative; */
   /* margin-left: 1.8%;
   margin-top: 1.25%; */
-  background-image:url('../assets/img/bg.png');
+  background-image: url('../assets/img/bg.png');
   /* background-size: contain; */
-   background-size: 100% 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   /* padding-bottom: 47.27%; */
   /* position: fixed;
   z-index: 10; */
 }
+
 .edit {
-   margin-left: 20px;
+  margin-left: 20px;
 }
+
 .marquee {
-  color:white;
+  color: white;
   width: 100%;
   /* position: relative; */
   /* margin-left: 1.8%;
@@ -227,16 +183,18 @@ export default {
   z-index: 10; */
   margin-top: 40px;
   font-size: 1px;
- 
+
   /* margin-top: v-bind('content.pos'); */
 }
+
 .sub {
   height: 20%;
   /* margin-top: 80px; */
   /* position:absolute;
   bottom:0px; */
 }
-#text{
+
+#text {
   width: 71.8%;
   /* margin-top: 1%; */
   background-color: #292d3e;
@@ -246,10 +204,12 @@ export default {
   margin-top: 1.25%;
   /* font-size: 100px; */
 }
-.back{
+
+.back {
   margin-left: 20%;
 }
-img{
-    width: 70%;
+
+img {
+  width: 70%;
 }
 </style>

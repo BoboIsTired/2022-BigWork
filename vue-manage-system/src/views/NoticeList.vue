@@ -30,12 +30,12 @@
             </div>
             <div class="op2">
                 <div v-if="data.showPL" class="btng1">
-                    <el-button type="primary" @click="addNotice()" >新建公告</el-button>
+                    <el-button type="primary" @click="dialogVisible = true" >新建公告</el-button>
                     <!-- <el-button @click="handleSearch" style="margin-left:30px" disabled>批量发布</el-button>
                 <el-button @click="handleCreate" style="margin-left:30px" disabled>批量删除</el-button> -->
                 </div>
                 <div v-else class="btng2">
-                    <el-button type="primary" @click="addNotice()" >新建公告</el-button>
+                    <el-button type="primary" @click="dialogVisible = true" >新建公告</el-button>
                     <!-- <el-button type="primary" @click="handleSearch" style="margin-left:30px">批量发布</el-button>
                     <el-button type="primary" @click="handleCreate" style="margin-left:30px">批量删除</el-button> -->
                 </div>
@@ -61,8 +61,11 @@
                         ">{{ scope.row.programState }}</el-tag>
                     </template>
                 </el-table-column> -->
+                <el-table-column prop="fontSize" label="字体大小"></el-table-column>
+                <el-table-column prop="fontColor" label="字体颜色"></el-table-column>
+                <el-table-column prop="fontPosition" label="字体位置"></el-table-column>
                 <el-table-column prop="author" label="作者"></el-table-column>
-                <el-table-column prop="startTime" label="创建时间"></el-table-column>
+                
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="scope">
                         <el-button type="text" @click="handleImg(scope.$index, scope.row)">详情</el-button>
@@ -72,8 +75,8 @@
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">加密下载
                         </el-button> -->
-                        <!-- <el-button type="text" class="red" @click="handlePub(scope.$index, scope.row)">删除
-                        </el-button> -->
+                        <el-button type="text"  @click="handlePub(scope.$index, scope.row)">发布
+                        </el-button>
                         <el-button type="text" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -83,6 +86,7 @@
                     :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
             </div>
         </div>
+        
         <el-dialog :data="tableData" v-model="visible" :show-close="false">
             <template #default="scope">
                 <div class="my-header">
@@ -92,9 +96,10 @@
                                 <el-row>
                                     <el-col :span="24">标题：{{ form.noticeTitle }}</el-col>
                                     <el-col :span="24">公告内容：{{ form.body }}</el-col>
-                                    <el-col :span="24">字体大小：{{ form.fontSize }}</el-col>
+                                    <el-col :span="24">创建时间：{{ form.startTime }}</el-col>
+                                    <!-- <el-col :span="24">字体大小：{{ form.fontSize }}</el-col>
                                     <el-col :span="24">字体颜色：{{ form.fontColor }}</el-col>
-                                    <el-col :span="24">字体位置：{{ form.fontPosition }}</el-col>
+                                    <el-col :span="24">字体位置：{{ form.fontPosition }}</el-col> -->
                                 </el-row>
                             </div>
                         </el-tab-pane>
@@ -107,25 +112,16 @@
                 </div>
             </template>
         </el-dialog>
-        <el-dialog v-model="dialogVisible" title="新建节目" width="40%">
+        <el-dialog v-model="dialogVisible" title="新建公告" width="40%">
             <el-form label-width="70px">
-                <el-form-item label="名称：">
-                    <el-input v-model="form1.programName"></el-input>
-                </el-form-item>
-                <el-form-item label="分辨率：">
-                    <el-select v-model="form1.resolutionRatio" placeholder="分辨率" class="handle-select mr10">
-                        <el-option key="1" label="1920x1080(横)" value="1920x1080(横)"></el-option>
-                        <el-option key="2" label="1080x1920(竖)" value="1080x1920(竖)"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="时长：">
-                    <el-input-number v-model="num" :min="1" :max="60" @change="handleChange" />
+                <el-form-item label="标题：">
+                    <el-input v-model="form1.noticeTitle"></el-input>
                 </el-form-item>
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="addProgram()">确定</el-button>
+                    <el-button type="primary" @click="addNotice()">确定</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -219,7 +215,7 @@ export default {
 
         });
         let form1 = reactive({
-            noticeTitle: "123",
+            noticeTitle: "",
                 body:"123",
                 fontSize: "12",
                 fontColor: "red",
@@ -260,10 +256,18 @@ export default {
         }
 
         const addNotice = () => {
-
+            console.log(form1)
+            if (form1.noticeTitle === '') {
+                ElMessage.error('公告标题不能为空')
+            } else {
+                // console.log(form1.noticeTitle)
                 route.push({
-                    path: '/noticeadd'
+                    path: '/noticeadd',
+                    query: { noticeTitle: form1.noticeTitle}
                 })
+                dialogVisible.value = false
+            }
+                
 
             
 
