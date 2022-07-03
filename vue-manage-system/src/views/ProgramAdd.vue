@@ -46,7 +46,7 @@ export default {
       duration: "",
       programMaterial: "",
       programState: "未使用",
-      programSize: "1024",
+      programSize: "",
       author:localStorage.getItem("ms_username")
     });
     const state = reactive({
@@ -54,6 +54,7 @@ export default {
       resolution: "",
       duration: "",
       imgUrl: "",
+      imgSize:"",
       imgList: [
         //   {pic:"https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"},
         //  {pic:"https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"},
@@ -71,7 +72,7 @@ export default {
         for (let i = 0; i < list.records.length; i++) {
           state.imgList[i].url = '/api/imgs/' + state.imgList[i].url
         }
-        //   console.log(state.imgList[0].pic)
+          console.log(state.imgList)
         state.imgUrl = state.imgList[0].url
       });
     };
@@ -90,6 +91,7 @@ export default {
       query.programMaterial=state.imgUrl.slice(10)
       query.programName=state.programName
       query.resolution=state.resolution
+      query.programSize=state.imgSize
       // console.log(query.imgUrl)
       MaterialCreate(query).then((res)=>{
         console.log(res.msg)
@@ -98,8 +100,8 @@ export default {
     }
     const showimg = (index) => {
       state.imgUrl = state.imgList[index].url
-      
-      // console.log(state.imgUrl)
+      state.imgSize=state.imgList[index].size
+      // console.log(state.imgSize)
     }
     return {
       state,

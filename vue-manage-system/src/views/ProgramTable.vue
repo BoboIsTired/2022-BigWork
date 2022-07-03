@@ -80,7 +80,7 @@
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                         <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">加密下载
                         </el-button> -->
-                        <el-button type="text" @click="handleEdit(scope.$index, scope.row)">发布
+                        <el-button type="text" @click="handlePub(scope.$index, scope.row)">发布
                         </el-button>
                     </template>
                 </el-table-column>
@@ -333,7 +333,9 @@ export default {
             }
 
         }
-
+        const handlePub=(index,row)=>{
+            console.log(row)
+        }
         const num = ref(1)
         const handleChange = () => {
             form1.programDuration = num.value
@@ -361,7 +363,8 @@ export default {
             closeViewer,
             saveEdit,
             handleCreate,
-            addProgram
+            addProgram,
+            handlePub
         };
     },
 };
