@@ -2,7 +2,7 @@
 
   <div v-if="state.resolution == '1920x1080(横)'" class="huabu" style="display: flex;justify-content: space-around">
     <div class="left">
-      <el-button type="primary" @click="handleCreate" >新建节目</el-button>
+     
       <div class="d1">
         <img class="img1" :src="state.imgUrl" alt="" style="height:100%;width:100%">
       </div>
@@ -30,6 +30,7 @@
 
     </div>
   </div>
+   <el-button type="primary" @click="handleCreate" style="margin:10px 50%">新建节目</el-button>
 </template>
 
 <script>
