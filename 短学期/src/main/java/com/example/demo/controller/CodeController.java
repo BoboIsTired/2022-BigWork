@@ -12,11 +12,12 @@ public class CodeController {
 
     @PostMapping(value = "/operation")
     public String sendCmd(@RequestBody Map<String, Object> map) {
-        String msg = map.get("msg").toString();
+        String id = map.get("id").toString();
         String codeID = map.get("codeId").toString();
+//        String textSize = map.get("textSize").toString();
 
 //        String message = new Gson().toJson(codeID+msg);
-        String message = codeID + ">" +msg;
+        String message = codeID + ">" + id;
         System.out.println("message in json is :"+message);
 
         return WebSocket.sendMessage(message,10086);

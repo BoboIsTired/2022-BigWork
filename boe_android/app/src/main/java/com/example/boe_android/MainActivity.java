@@ -5,7 +5,12 @@ package com.example.boe_android;
 import android.os.Bundle;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 import android.app.Activity;
@@ -27,6 +32,7 @@ public class MainActivity extends Activity {
 
     private Button btn;
     private ImageView imageview;
+//    Handler h = null;
 
 //    private Code currentCode;
 
@@ -40,35 +46,80 @@ public class MainActivity extends Activity {
         WebClient.initWebSocket(this,10086);
 
 
-//        Code code = new Code();
-
         btn = (Button) this.findViewById(R.id.button);
         imageview = (ImageView) this.findViewById(R.id.imageView);
+//        h = new Handler(){
+//            @override
+//            public void handleMessage(Message msg){
+//                // call update gui method.
+//            }
+//        };
 
-        StrictMode.setThreadPolicy(new
-                StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        StrictMode.setVmPolicy(
-                new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+
+//        StrictMode.setThreadPolicy(new
+//                StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+//        StrictMode.setVmPolicy(
+//                new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+
+
+
+
+
+
 
         btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
 //                btn.setEnabled(false);
+//                new Thread(){
+//                    @Override
+//                    public void run() {
+//                        networkRequest();
+//                    }
+//                }.start();
 
-                Code code = new Code();
-                TextView textview = (TextView) findViewById(R.id.textView3);
-                textview.setText(code.getMsg());
-                String strURL = code.getMsg();
-                try {
-                    Bitmap bitmap = getBitmap(strURL);
-                    imageview.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+//                Code code = new Code();
+////                TextView textview = (TextView) findViewById(R.id.textView3);
+////                textview.setText(code.getMsg());
+////                String strURL = code.getMsg();
+//                try {
+//                    Bitmap bitmap = getBitmap(code.getPicUrl());
+//                    imageview.setImageBitmap(bitmap);
+//                } catch (IOException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        System.out.println("MainActivity:onResume");
+        Code code = new Code();
+        try {
+            Bitmap bitmap = getBitmap(code.getPicUrl());
+            imageview.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    public void changePic(String picUrl){
+        imageview = (ImageView) this.findViewById(R.id.imageView);
+            try {
+            Bitmap bitmap = getBitmap(picUrl);
+            imageview.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 
     public Bitmap getBitmap(String path) throws IOException {
         try {
@@ -87,4 +138,5 @@ public class MainActivity extends Activity {
         }
         return null;
     }
+
 }
