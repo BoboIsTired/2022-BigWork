@@ -138,7 +138,7 @@ export default {
     setup() {
         const query = reactive({
             id:"",
-            cordId:"2"
+            codeId:"2"
 
         });
         const data = reactive({
