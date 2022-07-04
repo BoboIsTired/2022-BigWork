@@ -39,7 +39,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :span="16">
         <el-card class="plan-card">
           <el-table :data="tableData" height="250" style="width: 100%">
@@ -67,13 +67,13 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
 
     <el-row :gutter="20">
-      <el-col :span="6">
-        <el-card class="box-card">
+      <el-col :span="7">
+        <el-card class="box-card" style="height:400px">
           <div class="card-header">
-            <span>设备状态</span>
+            <span style="font-size:25px">设备状态</span>
             <!-- <el-button class="button" text>Operation button</el-button> -->
           </div>
           <div class="con">
@@ -82,28 +82,32 @@
                 <el-progress
                   type="circle"
                   :percentage="100"
-                  width="100"
+                  width="150"
                 ><span class="s1">{{sbtotal}}台</span></el-progress>
               </div>
             </div>
             <div class="right" >
               <ul>
                 <li class="l1">
-                  <!-- <div class="d1"> -->
+                  <div class="d1">
                     <span>离线</span>
                     <span>{{ sb_l }}</span>
                     <span>台</span>
-                  <!-- </div> -->
+                  </div>
                 </li>
                 <li class="l2">
+                  <div class="d1">
                     <span>播放</span>
                     <span>{{ sb_z }}</span>
                     <span>台</span>
+                  </div>
                 </li>
                 <li class="l3">
+                  <div class="d1">
                     <span>空闲</span>
                     <span>{{ sb_k }}</span>
                     <span>台</span>
+                  </div> 
                 </li>
               </ul>
             </div>
@@ -111,16 +115,16 @@
         </el-card>
       </el-col>
 
-      <el-col :span="8">
-        <el-card class="box-card">
+      <el-col :span="7">
+        <el-card class="box-card"  style="height:400px">
           <div class="card-header">
-            <span>资源素材</span>
+            <span style="font-size:25px">资源素材</span>
             <!-- <el-button class="button" text>Operation button</el-button> -->
           </div>
           <div class="con">
             <div class="demo-progress">
               <div class="a">
-                <span>图片</span>
+                <span style="font-size:20px">图片</span>
                 <el-progress
                   :text-inside="true"
                   :stroke-width="24"
@@ -129,7 +133,7 @@
                 />
               </div>
               <div class="b">
-                <span>视频</span>
+                <span style="font-size:20px">视频</span>
                 <el-progress
                   :text-inside="true"
                   :stroke-width="22"
@@ -138,7 +142,7 @@
                 />
               </div>
               <div class="c">
-                <span>音频</span>
+                <span style="font-size:20px">音频</span>
                 <el-progress
                   :text-inside="true"
                   :stroke-width="20"
@@ -150,24 +154,24 @@
           </div>
         </el-card>
       </el-col>
-            <el-col :span="8">
+        <el-col :span="10">
+           <el-card class="box-card" >
         <el-tabs
          v-model="activeName" class="demo-tabs" @tab-click="handleClick"
         >
           <el-tab-pane label="机构" name="first" :lazy="true">
-            <el-card >
+            <!-- <el-card > -->
               <div>
                 <schart    
                   class="schart"
                   :canvasId="canvasId1"
                   :options="options2">
                 </schart>
-              </div>
-              
-            </el-card>
+              </div>              
+            <!-- </el-card> -->
           </el-tab-pane>
           <el-tab-pane label="分组" name="second" :lazy="true">
-            <el-card >
+            <!-- <el-card > -->
               <div>
                 <schart
                   class="schart"
@@ -176,12 +180,42 @@
                 </schart>
               </div>
               
-            </el-card>
+            <!-- </el-card> -->
           </el-tab-pane>
         </el-tabs>
+           </el-card>
       </el-col>
     </el-row>
 
+      <el-row :gutter="20">
+      <el-col :span="16">
+        <el-card class="plan-card">
+          <el-table :data="tableData" height="250" style="width: 100%">
+            <el-table-column prop="number" label="序号" />
+            <el-table-column prop="planname" label="计划名称" />
+            <el-table-column prop="planconditon" label="计划状态" />
+            <el-table-column prop="planconditon" label="提交时间" />
+            <el-table-column prop="planconditon" label="提交人" />
+            <el-table-column prop="delivertime" label="操作" />
+          </el-table>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>事件记录</span>
+            <el-divider />
+          </div>
+          <div>
+            <el-scrollbar height="500px">
+              <p v-for="item in 20" :key="item" class="scrollbar-demo-item" >
+                {{ item }}
+              </p>
+            </el-scrollbar>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
   </div>
 </template>
@@ -456,6 +490,7 @@ export default {
   padding-top: 10px;
   /* margin-left: 10px; */
   vertical-align: middle;
+  margin: 100px 0px;
 }
 .left {
   padding-right: 1px;
@@ -464,7 +499,7 @@ export default {
 .right {
   display: flex;
   align-items: center;
-  margin-left: 25px;
+  margin-left: 75px;
   width: 100px;
   padding-right: 20px;
   /* justify-content: center; */
@@ -492,20 +527,22 @@ export default {
 }
 .l1::marker {
   color: rgb(120, 128, 141);
-  font-size: 30px;
+  font-size: 40px;
+  
 }
 
 .l2::marker {
   color: rgb(78, 203, 115);
-  font-size: 30px;
+  font-size: 40px;
 }
 
 .l3::marker {
   color: rgb(251, 212, 55);
-  font-size: 30px;
+  font-size: 40px;
 }
 .d1 {
   margin-top: 0px;
+  font-size: 20px;
 }
 .s1 {
   font-size: 30px;
