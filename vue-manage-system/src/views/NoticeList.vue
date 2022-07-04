@@ -131,13 +131,18 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { NoticeData } from "../api/index";
+import { NoticeData,imgPub } from "../api/index";
 import { useRouter } from "vue-router";
 export default {
     name: "basetable",
     setup() {
         const query = reactive({
-
+            id:"",
+            // body:"",
+            // fontSize: "",
+            // fontColor: "",
+            // fontPosition: "",
+            cordId:"2"
 
         });
         const data = reactive({
@@ -152,7 +157,8 @@ export default {
                 fontColor: "red",
                 fontPosition: "1",
                 author: "jx",
-                startTime: ""
+                startTime: "",
+                id:""
             }
         ]);
         const pageTotal = ref(0);
@@ -273,7 +279,22 @@ export default {
 
         }
         const handlePub = (index, row) => {
-            console.log(row)
+            query.id=row.id
+            // query.body=row.body
+            // query.fontColor=row.fontColor
+            // query.fontPosition=row.fontPosition
+            // query.fontSize=row.fontSize
+            console.log(query)
+            imgPub(query).then((res) => {
+                console.log(res)
+                if(res!='failed'){
+                    ElMessage.success('发布成功！')
+                }else{
+                    ElMessage.error('发布失败！')
+                }
+                
+                
+            })
         }
         const num = ref(1)
         const handleChange = () => {

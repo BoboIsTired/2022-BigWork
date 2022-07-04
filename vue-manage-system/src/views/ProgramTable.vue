@@ -165,7 +165,8 @@ export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            msg: "",
+            id:"",
+            // msg: "",
             codeId: '1'
 
         });
@@ -320,8 +321,10 @@ export default {
 
         }
         const handlePub = (index, row) => {
-            query.msg = row.programMaterial.slice(4)
-            query.msg = 'http://192.168.123.21:3000' + query.msg
+            // query.msg = row.programMaterial.slice(4)
+            // query.msg = 'http://192.168.123.21:3000' + query.msg
+            query.id=row.id
+            console.log(query)
             imgPub(query).then((res) => {
                 console.log(res)
                 if(res!='failed'){
