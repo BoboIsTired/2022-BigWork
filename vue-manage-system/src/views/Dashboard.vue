@@ -70,27 +70,42 @@
     </el-row>
 
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card class="box-card">
           <div class="card-header">
             <span>设备状态</span>
             <!-- <el-button class="button" text>Operation button</el-button> -->
           </div>
           <div class="con">
-            <div class="left">
+            <div class="left" >
               <div class="demo-progress">
                 <el-progress
                   type="circle"
-                  :percentage="(sb_z / (sb_l + sb_k + sb_z)) * 100"
-                />
-
-                <!-- <el-progress type="circle" :percentage="100" status="success" /> -->
+                  :percentage="100"
+                  width="100"
+                ><span class="s1">{{sbtotal}}台</span></el-progress>
               </div>
             </div>
-            <div class="right">
-              <span>离线{{ sb_l }}</span>
-              <span>在线{{ sb_z }}</span>
-              <span>空闲{{ sb_k }}</span>
+            <div class="right" >
+              <ul>
+                <li class="l1">
+                  <!-- <div class="d1"> -->
+                    <span>离线</span>
+                    <span>{{ sb_l }}</span>
+                    <span>台</span>
+                  <!-- </div> -->
+                </li>
+                <li class="l2">
+                    <span>播放</span>
+                    <span>{{ sb_z }}</span>
+                    <span>台</span>
+                </li>
+                <li class="l3">
+                    <span>空闲</span>
+                    <span>{{ sb_k }}</span>
+                    <span>台</span>
+                </li>
+              </ul>
             </div>
           </div>
         </el-card>
@@ -137,28 +152,30 @@
       </el-col>
             <el-col :span="8">
         <el-tabs
-          v-model="activeName"
-          class="demo-tabs"
-          @tab-click="handleClick"
+         v-model="activeName" class="demo-tabs" @tab-click="handleClick"
         >
-          <el-tab-pane label="机构" name="first">
-            <el-card shadow="hover">
-              <schart
-                ref="line"
-                class="schart"
-                canvasId="line"
-                :options="options2"
-              ></schart>
+          <el-tab-pane label="机构" name="first" :lazy="true">
+            <el-card >
+              <div>
+                <schart    
+                  class="schart"
+                  :canvasId="canvasId1"
+                  :options="options2">
+                </schart>
+              </div>
+              
             </el-card>
           </el-tab-pane>
-          <el-tab-pane label="分组" name="second">
-            <el-card shadow="hover">
-              <schart
-                ref="bar"
-                class="schart"
-                canvasId="bar"
-                :options="options"
-              ></schart>
+          <el-tab-pane label="分组" name="second" :lazy="true">
+            <el-card >
+              <div>
+                <schart
+                  class="schart"
+                  :canvasId="canvasId2"
+                  :options="options">
+                </schart>
+              </div>
+              
             </el-card>
           </el-tab-pane>
         </el-tabs>
@@ -188,13 +205,14 @@ export default {
     let num_p = ref("321");
     let num_plan =ref("321") ;
     let num_m = ref("321");
-    let sb_l = "0";
-    let sb_z = "1";
-    let sb_k = "0";
-
+    let sb_l = 0;
+    let sb_z = 1;
+    let sb_k = 0;
+    let sbtotal = sb_l+sb_z+sb_k; 
     let picture = "20";
     let ship = "10";
     let music = "20";
+    const activeName = ref('second')
     const getData = () => {
             MachineData().then((res) => {
                 var list = res.data
@@ -237,6 +255,11 @@ export default {
         value: 1065,
       },
     ]);
+    const canvasId1 = 'myCanvas1'
+    const canvasId2 = 'myCanvas2'
+    const handleClick = () =>{
+      console.log(activeName.value)
+    }
     const options = {
       type: "bar",
       title: {
@@ -247,12 +270,12 @@ export default {
 
       datasets: [
         {
-          data: [0, 1, 0, 0, 0],
+          data: [0, 1, 0, 0],
         },
       ],
     };
     const options2 = {
-      type: "line",
+      type: "bar",
       title: {
         text: "机构设备分布",
       },
@@ -277,9 +300,15 @@ export default {
       sb_l,
       sb_k,
       sb_z,
+      sbtotal,
       picture,
       ship,
       music,
+      canvasId1,
+      canvasId2,
+      activeName,
+
+      handleClick
       // buttons
     };
   },
@@ -455,5 +484,30 @@ export default {
   left: 40px;
   margin-bottom: 15px;
   width: 280px;
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.l1::marker {
+  color: rgb(120, 128, 141);
+  font-size: 30px;
+}
+
+.l2::marker {
+  color: rgb(78, 203, 115);
+  font-size: 30px;
+}
+
+.l3::marker {
+  color: rgb(251, 212, 55);
+  font-size: 30px;
+}
+.d1 {
+  margin-top: 0px;
+}
+.s1 {
+  font-size: 30px;
 }
 </style>
