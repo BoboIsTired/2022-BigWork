@@ -57,4 +57,11 @@ public class ProgramsController {
         programsMapper.updateById(programs);
         return Result.success();
     }
+    //android获取
+    @GetMapping("/android")
+    public Programs getProgram(@RequestParam String id){
+        Programs res = programsMapper.selectOne(Wrappers.<Programs>lambdaQuery().eq(Programs::getId,id));
+        return res;
+    }
+
 }
