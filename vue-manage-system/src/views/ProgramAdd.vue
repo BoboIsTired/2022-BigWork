@@ -48,7 +48,7 @@ export default {
       programMaterial: "",
       programState: "未使用",
       programSize: "",
-      author:localStorage.getItem("ms_username")
+      author:localStorage.getItem("ms_realName")
     });
     const state = reactive({
       programName: "",

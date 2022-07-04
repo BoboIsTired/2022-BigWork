@@ -76,7 +76,7 @@ export default {
         fontSize: "0",
         fontPosition: "",
         body: "",
-        author:localStorage.getItem("ms_username")
+        author:localStorage.getItem("ms_realName")
       }
     }
   },

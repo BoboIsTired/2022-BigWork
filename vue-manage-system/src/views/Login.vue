@@ -55,40 +55,41 @@ export default {
         };
         const login = ref(null);
         const submitForm = () => {
-            // if (param.username == "" || param.password == "") {
-            //     ElMessage.error("账号或密码不能为空");
-            // } else {
-            //     axios
-            //         .post("/admin/login", {
-            //             accountName: param.username,
-            //             password: param.password,
-            //         })
-            //         .then((res) => {
-            //             console.log(res.data);
-            //             if (res.data.code === "-1") {
-            //                 ElMessage.error("账号或密码错误！！");
-            //             } else {
-            //                 if (res.data.data.enable === "停用") {
-            //                     ElMessage.error("该账号已被停用！")
-            //                 } else {
-            //                     ElMessage.success("登录成功");
-            //                     localStorage.setItem("ms_username", param.username);
-            //                     router.push("/");
-            //                 }
+            if (param.username == "" || param.password == "") {
+                ElMessage.error("账号或密码不能为空");
+            } else {
+                axios
+                    .post("/admin/login", {
+                        accountName: param.username,
+                        password: param.password,
+                    })
+                    .then((res) => {
+                        console.log(res.data.data.realName);
+                        if (res.data.code === "-1") {
+                            ElMessage.error("账号或密码错误！！");
+                        } else {
+                            if (res.data.data.enable === "停用") {
+                                ElMessage.error("该账号已被停用！")
+                            } else {
+                                ElMessage.success("登录成功");
+                                localStorage.setItem("ms_realName", res.data.data.realName);
+                                localStorage.setItem("ms_username", param.username);
+                                router.push("/");
+                            }
 
-            //             }
-            //         });
-            // }
-            login.value.validate((valid) => {
-                if (valid) {
-                    ElMessage.success("登录成功");
-                    localStorage.setItem("ms_username", param.username);
-                    router.push("/");
-                } else {
-                    ElMessage.error("登录失败");
-                    return false;
-                }
-            });
+                        }
+                    });
+            }
+            // login.value.validate((valid) => {
+            //     if (valid) {
+            //         ElMessage.success("登录成功");
+            //         localStorage.setItem("ms_username", param.username);
+            //         router.push("/");
+            //     } else {
+            //         ElMessage.error("登录失败");
+            //         return false;
+            //     }
+            // });
         };
 
         const store = useStore();
