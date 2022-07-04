@@ -138,10 +138,6 @@ export default {
     setup() {
         const query = reactive({
             id:"",
-            // body:"",
-            // fontSize: "",
-            // fontColor: "",
-            // fontPosition: "",
             cordId:"2"
 
         });

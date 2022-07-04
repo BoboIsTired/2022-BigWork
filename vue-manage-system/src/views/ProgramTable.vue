@@ -166,7 +166,6 @@ export default {
     setup() {
         const query = reactive({
             id:"",
-            // msg: "",
             codeId: '1'
 
         });
