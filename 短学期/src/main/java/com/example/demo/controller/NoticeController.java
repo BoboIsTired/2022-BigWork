@@ -52,4 +52,11 @@ public class NoticeController {
         noticeMapper.updateById(notice);
         return Result.success();
     }
+
+    //android获取
+    @GetMapping("/android")
+    public Notice getNotice(@RequestParam String id){
+        Notice res = noticeMapper.selectOne(Wrappers.<Notice>lambdaQuery().eq(Notice::getId,id));
+        return res;
+    }
 }
