@@ -29,7 +29,7 @@ export default {
         https: false,
         proxy: {
           '/api': {
-            target: 'http://121.40.91.87:3000',
+            target: 'http://118.31.244.173:3000',
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ''),
           },

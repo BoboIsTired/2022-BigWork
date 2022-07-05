@@ -22,7 +22,7 @@
                
                 <el-button @click="handleSearch">重置</el-button>
                 <el-button type="primary"  @click="handleSearch">搜索</el-button>
-                <el-button type="primary"  @click="$router.push('/planadd')">新建账户</el-button>
+                <el-button type="primary"  @click="$router.push('/planadd')">新建计划</el-button>
                 <el-button @click="handleSearch">批量删除</el-button>
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">

@@ -206,7 +206,7 @@ export default {
                 // console.log(tableData.value[0])
                 pageTotal.value = res.data.records.length || 50;
                 for (var i = 0; i < res.data.records.length; i++) {
-                    tableData.value[i].programMaterial = '/api/imgs/' + tableData.value[i].programMaterial
+                    tableData.value[i].programMaterial = '/api/file/' + tableData.value[i].programMaterial
                 }
                 // tableData[0].programMaterial = '/api/imgs/' + tableData[0].programMaterial
 

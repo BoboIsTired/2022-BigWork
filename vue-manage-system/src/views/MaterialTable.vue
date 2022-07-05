@@ -49,7 +49,7 @@
             <el-button>取消全选</el-button>
             <el-button type="primary">全选</el-button>
             <el-button type="success">批量删除</el-button>
-            <el-button type="info">上传素材</el-button>
+            <el-button type="file">上传素材</el-button>
           </el-row>
         </div>
       </div>
@@ -128,7 +128,7 @@ export default {
       // this.fileList[0].url='/api/imgs/'+this.fileList[0].url
       // console.log(this.fileList[0].url)
       for(var i=0;i<this.fileList.length;i++){
-        this.fileList[i].url='/api/imgs/'+this.fileList[i].url
+        this.fileList[i].url='/api/file/'+this.fileList[i].url
       }
       console.log(this.fileList)
 

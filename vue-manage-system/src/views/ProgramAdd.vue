@@ -71,7 +71,7 @@ export default {
         state.imgList = list.records;
         // console.log(state.imgList)
         for (let i = 0; i < list.records.length; i++) {
-          state.imgList[i].url = '/api/imgs/' + state.imgList[i].url
+          state.imgList[i].url = '/api/file/' + state.imgList[i].url
         }
           console.log(state.imgList)
         state.imgUrl = state.imgList[0].url
