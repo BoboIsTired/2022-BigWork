@@ -48,8 +48,8 @@ public class MaterialController {
     @Resource
     MaterialMapper materialMapper;
 
-    @Value("${files.upload.path}")
-    private String fileUploadPath;
+//    @Value("${files.upload.path}")
+//    private String fileUploadPath;
 
     //上传
     @PostMapping("/upload")

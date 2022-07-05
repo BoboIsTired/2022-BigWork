@@ -128,7 +128,7 @@ export default {
       // this.fileList[0].url='/api/imgs/'+this.fileList[0].url
       // console.log(this.fileList[0].url)
       for(var i=0;i<this.fileList.length;i++){
-        this.fileList[i].url='/api/imgs/'+this.fileList[i].url
+        this.fileList[i].url='/api/file/'+this.fileList[i].url
       }
       console.log(this.fileList)
 
