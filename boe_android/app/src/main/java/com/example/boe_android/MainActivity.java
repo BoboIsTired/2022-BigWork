@@ -2,6 +2,7 @@ package com.example.boe_android;
 
 //import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,14 +26,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
 
-    private Button btn;
     private ImageView imageview;
-//    Handler h = null;
 
 //    private Code currentCode;
 
@@ -46,67 +46,11 @@ public class MainActivity extends Activity {
         WebClient.initWebSocket(this,10086);
 
 
-        btn = (Button) this.findViewById(R.id.button);
         imageview = (ImageView) this.findViewById(R.id.imageView);
-//        h = new Handler(){
-//            @override
-//            public void handleMessage(Message msg){
-//                // call update gui method.
-//            }
-//        };
-
-
-//        StrictMode.setThreadPolicy(new
-//                StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-//        StrictMode.setVmPolicy(
-//                new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
-
-
-
-
-
-
-
-        btn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-//                btn.setEnabled(false);
-//                new Thread(){
-//                    @Override
-//                    public void run() {
-//                        networkRequest();
-//                    }
-//                }.start();
-
-//                Code code = new Code();
-////                TextView textview = (TextView) findViewById(R.id.textView3);
-////                textview.setText(code.getMsg());
-////                String strURL = code.getMsg();
-//                try {
-//                    Bitmap bitmap = getBitmap(code.getPicUrl());
-//                    imageview.setImageBitmap(bitmap);
-//                } catch (IOException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-            }
-        });
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        System.out.println("MainActivity:onResume");
-        Code code = new Code();
-        try {
-            Bitmap bitmap = getBitmap(code.getPicUrl());
-            imageview.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
 
     }
+
 
 
     public void changePic(String picUrl){
@@ -139,4 +83,49 @@ public class MainActivity extends Activity {
         return null;
     }
 
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+
+//        Code codeText = new Code();
+//        int fontSize = Integer.parseInt(codeText.getFontSize());
+//        String textBody = codeText.getTextBody();
+//
+//        String textPosition = codeText.getFontPosition();
+//        int position = 1;
+//        if(textPosition.equals("中")){
+//            position=5;
+//        }
+//        else if(textPosition.equals("下"))
+//            position = 10;
+//
+//        String fontColor = codeText.getFontColor();
+//        //创建布局对象
+//        RelativeLayout rl = (RelativeLayout) findViewById(R.id.relativelayout);
+//        rl.removeAllViews();
+//            //将HorseView1加入布局中
+//        HorseView horseview1 = new HorseView(this);
+//        rl.addView(horseview1);
+//
+//        //设置HorseView的布局属性
+//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) horseview1.getLayoutParams();
+//        layoutParams.setMargins(0, position * 150, 0, 0);
+//        layoutParams.width = 1200;
+//        layoutParams.height = 150;
+//        horseview1.setLayoutParams(layoutParams);
+//        horseview1.setScrollWidth(layoutParams.width); //滚动框的宽度
+//        horseview1.setCoordinateY(150 / 2 + 50 / 2);
+//        horseview1.setCurrentPosition(layoutParams.width);//设置滚动信息从右边出来
+//        horseview1.setSpeed(4); //文字播放速度
+//        horseview1.setColor(Color.parseColor(fontColor));
+//        horseview1.setTextSize(fontSize);
+//        horseview1.setText(textBody);
+//        horseview1.setIndex(1);
+//
+//        horseview1.start();
+    }
+
 }
+

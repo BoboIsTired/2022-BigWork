@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -36,7 +38,7 @@ public class WebClient extends WebSocketClient{
      *  路径为ws+服务器地址+服务器端设置的子路径+参数（这里对应服务器端机器编号为参数）
      *  如果服务器端为https的，则前缀的ws则变为wss
      */
-    private static final String mAddress = "ws://172.20.10.3:3000/websocket/";
+    private static final String mAddress = "ws://118.31.244.173:3000/websocket/";
     private void showLog(String msg){
         Log.d("WebClient---->", msg);
     }
@@ -100,63 +102,157 @@ public class WebClient extends WebSocketClient{
         String url1 = "";
         if(cordId==1){
 //
-            url1 = "http://172.20.10.3:3000/programs/android?id="+id;
-        }else{
-            url1 = "http://172.20.10.3:3000/notice";
-        }
-
-
-        HttpURLConnection connection=null;
-        try {
-
-            URL url = new URL(url1);
-//            url="http://172.20.10.3:3000/admin"
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(3000);
-            connection.setReadTimeout(3000);
-            //设置请求方式 GET / POST 一定要大小
-            connection.setRequestMethod("GET");
-            connection.setDoInput(true);
-            connection.setDoOutput(false);
-            connection.connect();
-            int responseCode = connection.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new IOException("HTTP error code" + responseCode);
-            }
-//            String id = JSON.()
-            String result = getStringByStream(connection.getInputStream());
-            JSONObject res = new JSONObject(result);
-            Code code = new Code();
-
-            code.setPicUrl(res.get("programMaterial").toString());
-            code.setPicUrl("http://172.20.10.3:3000/imgs/"+code.getPicUrl());
-            System.out.println(code.getPicUrl());
-            imageview = (ImageView) ((Activity)this.mContext).findViewById(R.id.imageView);
+            url1 = "http://118.31.244.173:3000/programs/android?id="+id;
+            HttpURLConnection connection=null;
             try {
-                Bitmap bitmap = getBitmap(code.getPicUrl());
-                ((Activity)this.mContext).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageview.setImageBitmap(bitmap);
 
-                    }
-                });
+                URL url = new URL(url1);
+//            url="http://172.20.10.3:3000/admin"
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(3000);
+                //设置请求方式 GET / POST 一定要大小
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.setDoOutput(false);
+                connection.connect();
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    throw new IOException("HTTP error code" + responseCode);
+                }
+//            String id = JSON.()
+                String result = getStringByStream(connection.getInputStream());
+                JSONObject res = new JSONObject(result);
+                Code code = new Code();
 
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
+                code.setPicUrl(res.get("programMaterial").toString());
+                code.setPicUrl("http://118.31.244.173:3000/file/"+code.getPicUrl());
+                System.out.println(code.getPicUrl());
+                imageview = (ImageView) ((Activity)this.mContext).findViewById(R.id.imageView);
+                try {
+                    Bitmap bitmap = getBitmap(code.getPicUrl());
+                    ((Activity)this.mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            imageview.setImageBitmap(bitmap);
+
+                        }
+                    });
+
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+
+                if (result == null) {
+                    Log.d("Fail", "失败了");
+                }else{
+                    Log.d("succuss", result);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else{
+            url1 = "http://118.31.244.173:3000/notice/android?id="+id;
+            HttpURLConnection connection=null;
+            try {
+
+                URL url = new URL(url1);
+//            url="http://172.20.10.3:3000/admin"
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(3000);
+                //设置请求方式 GET / POST 一定要大小
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.setDoOutput(false);
+                connection.connect();
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    throw new IOException("HTTP error code" + responseCode);
+                }
+//            String id = JSON.()
+                String result = getStringByStream(connection.getInputStream());
+                JSONObject res = new JSONObject(result);
+                Code code = new Code();
+
+//                code.setPicUrl(res.get("programMaterial").toString());
+//                code.setPicUrl("http://172.20.10.3:3000/imgs/"+code.getPicUrl());
+                code.setFontPosition(res.get("fontPosition").toString());
+                code.setTextBody(res.get("body").toString());
+                code.setFontSize(res.get("fontSize").toString());
+                code.setFontColor(res.get("fontColor").toString());
+
+                System.out.println(code.getTextBody());
+                RelativeLayout rl = (RelativeLayout) ((Activity)this.mContext).findViewById(R.id.relativelayout);
+//                imageview = (ImageView) ((Activity)this.mContext).findViewById(R.id.imageView);
+                try {
+//                    Bitmap bitmap = getBitmap(code.getPicUrl());
+
+                    ((Activity)this.mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                            imageview.setImageBitmap(bitmap);
+                            Code codeText = new Code();
+                            int fontSize = Integer.parseInt(codeText.getFontSize());
+                            String textBody = codeText.getTextBody()+"     ";
+
+                            String textPosition = codeText.getFontPosition();
+                            int position = 0;
+                            if(textPosition.equals("中")){
+                                position=2;
+                            }
+                            else if(textPosition.equals("下"))
+                                position = 5;
+
+                            String fontColor = codeText.getFontColor();
+                            rl.removeAllViews();
+                            //将HorseView1加入布局中
+                            HorseView horseview1 = new HorseView(mContext);
+                            rl.addView(horseview1);
+
+                            //设置HorseView的布局属性
+                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) horseview1.getLayoutParams();
+                            layoutParams.setMargins(0, position * 150, 0, 0);
+                            layoutParams.width = 2000;
+                            layoutParams.height = 800;
+                            horseview1.setLayoutParams(layoutParams);
+                            horseview1.setScrollWidth(layoutParams.width); //滚动框的宽度
+//                            horseview1.setScrollWidth(layoutParams.height);
+                            horseview1.setCoordinateY(500 / 2 );
+                            horseview1.setCurrentPosition(layoutParams.width);//设置滚动信息从右边出来
+                            horseview1.setSpeed(4); //文字播放速度
+                            horseview1.setColor(Color.parseColor(fontColor));
+                            horseview1.setTextSize(fontSize);
+                            horseview1.setText(textBody);
+                            horseview1.setIndex(1);
+
+                            horseview1.start();
+
+                        }
+                    });
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 
 
 
-            if (result == null) {
-                Log.d("Fail", "失败了");
-            }else{
-                Log.d("succuss", result);
+                if (result == null) {
+                    Log.d("Fail", "失败了");
+                }else{
+                    Log.d("succuss", result);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+
+
     }
     private String getStringByStream(InputStream inputStream){
         Reader reader;

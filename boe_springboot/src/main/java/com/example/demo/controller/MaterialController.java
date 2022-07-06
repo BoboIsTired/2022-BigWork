@@ -48,7 +48,7 @@ public class MaterialController {
     @Resource
     MaterialMapper materialMapper;
 
-    @Value("${files.upload.path}")
+    @Value("${file.path}")
     private String fileUploadPath;
 
     //上传
@@ -76,14 +76,14 @@ public class MaterialController {
         //拼写新的文件名
         String newName = uuid+StrUtil.DOT+upload.getType();
         // 图片存储目录及图片名称
-        String url_path = "imgs" + File.separator + newName;
+        String url_path = File.separator + newName;
 
         //图片保存路径
-        String savePath = staticPath + File.separator + url_path;
+        String savePath = fileUploadPath + File.separator + url_path;
         System.out.println("图片保存地址："+savePath);
         // 访问路径=静态资源路径+文件目录路径
-        String visitPath ="static/" + url_path;
-        System.out.println("图片访问uri："+visitPath);
+//        String visitPath ="static/" + url_path;
+//        System.out.println("图片访问uri："+visitPath);
 
         File saveFile = new File(savePath);
         if (!saveFile.exists()){

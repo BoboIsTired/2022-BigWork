@@ -31,7 +31,7 @@
                 <i class="el-icon-lx-noticefill grid-con-icon"></i>
                 <div class="grid-cont-right">
                   <div class="grid-num">{{ num_plan }}</div>
-                  <div>计划数量</div>
+                  <div>公告数量</div>
                 </div>
               </div>
             </el-card>
@@ -77,16 +77,13 @@
             <!-- <el-button class="button" text>Operation button</el-button> -->
           </div>
           <div class="con">
-            <div class="left" >
+            <div class="left">
               <div class="demo-progress">
-                <el-progress
-                  type="circle"
-                  :percentage="100"
-                  width="150"
-                ><span class="s1">{{sbtotal}}台</span></el-progress>
+                <el-progress type="circle" :percentage="100" width="150"><span class="s1">{{ sbtotal }}台</span>
+                </el-progress>
               </div>
             </div>
-            <div class="right" >
+            <div class="right">
               <ul>
                 <li class="l1">
                   <div class="d1">
@@ -107,7 +104,7 @@
                     <span>空闲</span>
                     <span>{{ sb_k }}</span>
                     <span>台</span>
-                  </div> 
+                  </div>
                 </li>
               </ul>
             </div>
@@ -116,7 +113,7 @@
       </el-col>
 
       <el-col :span="7">
-        <el-card class="box-card"  style="height:400px">
+        <el-card class="box-card" style="height:400px">
           <div class="card-header">
             <span style="font-size:25px">资源素材</span>
             <!-- <el-button class="button" text>Operation button</el-button> -->
@@ -125,69 +122,46 @@
             <div class="demo-progress">
               <div class="a">
                 <span style="font-size:20px">图片</span>
-                <el-progress
-                  :text-inside="true"
-                  :stroke-width="24"
-                  :percentage="30"
-                  status="success"
-                />
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="30" status="success" />
               </div>
               <div class="b">
                 <span style="font-size:20px">视频</span>
-                <el-progress
-                  :text-inside="true"
-                  :stroke-width="22"
-                  :percentage="20"
-                  status="warning"
-                />
+                <el-progress :text-inside="true" :stroke-width="22" :percentage="20" status="warning" />
               </div>
               <div class="c">
                 <span style="font-size:20px">音频</span>
-                <el-progress
-                  :text-inside="true"
-                  :stroke-width="20"
-                  :percentage="50"
-                  status="exception"
-                />
+                <el-progress :text-inside="true" :stroke-width="20" :percentage="50" status="exception" />
               </div>
             </div>
           </div>
         </el-card>
       </el-col>
-        <el-col :span="10">
-           <el-card class="box-card" >
-        <el-tabs
-         v-model="activeName" class="demo-tabs" @tab-click="handleClick"
-        >
-          <el-tab-pane label="机构" name="first" :lazy="true">
-            <!-- <el-card > -->
+      <el-col :span="10">
+        <el-card class="box-card">
+          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+            <el-tab-pane label="机构" name="first" :lazy="true">
+              <!-- <el-card > -->
               <div>
-                <schart    
-                  class="schart"
-                  :canvasId="canvasId1"
-                  :options="options2">
-                </schart>
-              </div>              
-            <!-- </el-card> -->
-          </el-tab-pane>
-          <el-tab-pane label="分组" name="second" :lazy="true">
-            <!-- <el-card > -->
-              <div>
-                <schart
-                  class="schart"
-                  :canvasId="canvasId2"
-                  :options="options">
+                <schart class="schart" :canvasId="canvasId1" :options="options2">
                 </schart>
               </div>
-              
-            <!-- </el-card> -->
-          </el-tab-pane>
-        </el-tabs>
-           </el-card>
+              <!-- </el-card> -->
+            </el-tab-pane>
+            <el-tab-pane label="分组" name="second" :lazy="true">
+              <!-- <el-card > -->
+              <div>
+                <schart class="schart" :canvasId="canvasId2" :options="options">
+                </schart>
+              </div>
+
+              <!-- </el-card> -->
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
       </el-col>
     </el-row>
 
-      <el-row :gutter="20">
+    <el-row :gutter="20">
       <el-col :span="16">
         <el-card class="plan-card">
           <el-table :data="tableData" height="250" style="width: 100%">
@@ -208,7 +182,7 @@
           </div>
           <div>
             <el-scrollbar height="500px">
-              <p v-for="item in 20" :key="item" class="scrollbar-demo-item" >
+              <p v-for="item in 20" :key="item" class="scrollbar-demo-item">
                 {{ item }}
               </p>
             </el-scrollbar>
@@ -222,41 +196,43 @@
 
 <script>
 import Schart from "vue-schart";
-import { onMounted, reactive,ref } from "vue";
-import { MachineData, ProgramData, userEdit } from "../api/index";
+import { onMounted, reactive, ref } from "vue";
+import { MachineData, ProgramData, NoticeData } from "../api/index";
 export default {
   name: "dashboard",
   components: { Schart },
   setup() {
-    onMounted(()=>{
+    onMounted(() => {
       ProgramData().then((res) => {
-                var list = res.data
-                // console.log(list.records)
-                // tableData.value = list.records;
-                num_p.value = list.records.length || 2;
-            })
-        })
+        var list = res.data
+        num_p.value = list.records.length || 2;
+      })
+      NoticeData().then((res) => {
+        var list = res.data
+        num_plan.value = list.records.length || 2;
+      })
+    })
     let num_p = ref("321");
-    let num_plan =ref("321") ;
+    let num_plan = ref("321");
     let num_m = ref("321");
     let sb_l = 0;
     let sb_z = 1;
     let sb_k = 0;
-    let sbtotal = sb_l+sb_z+sb_k; 
+    let sbtotal = sb_l + sb_z + sb_k;
     let picture = "20";
     let ship = "10";
     let music = "20";
     const activeName = ref('second')
     const getData = () => {
-            MachineData().then((res) => {
-                var list = res.data
-                // console.log(list.records)
-                // tableData.value = list.records;
-                num_m.value = list.records.length || 2;
-            });
-            
-        };
-        getData();
+      MachineData().then((res) => {
+        var list = res.data
+        // console.log(list.records)
+        // tableData.value = list.records;
+        num_m.value = list.records.length || 2;
+      });
+
+    };
+    getData();
     const name = localStorage.getItem("ms_username");
     // const role = name === "admin" ? "超级管理员" : "普通用户";
     const data = reactive([
@@ -291,7 +267,7 @@ export default {
     ]);
     const canvasId1 = 'myCanvas1'
     const canvasId2 = 'myCanvas2'
-    const handleClick = () =>{
+    const handleClick = () => {
       console.log(activeName.value)
     }
     const options = {
@@ -300,7 +276,7 @@ export default {
         text: "分组设备分布",
       },
       xRorate: 10,
-      labels: ["设备分组1", "设备分组2", "设备分组3", "设备分组4"],
+      labels: ["测试分组1", "测试分组2", "测试分组3", "测试分组4"],
 
       datasets: [
         {
@@ -314,14 +290,14 @@ export default {
         text: "机构设备分布",
       },
       xRorate: 10,
-      labels: ["zucc1", "zucc2"],
+      labels: ["城院测试", "城院测试2"],
       datasets: [
         {
           data: [0, 1],
         },
       ],
     };
-   
+
     return {
       num_p,
       num_plan,
@@ -458,6 +434,7 @@ export default {
   width: 100%;
   height: 300px;
 }
+
 /* 滚动条 */
 .scrollbar-demo-item {
   display: flex;
@@ -471,13 +448,16 @@ export default {
   background-color: #bebebe;
   color: var(--el-color-primary);
 }
+
 /* 下划线 */
 .demo-border .text {
   width: 15%;
 }
+
 .demo-border .line {
   width: 70%;
 }
+
 .demo-border .line div {
   width: 100%;
   height: 0;
@@ -492,10 +472,12 @@ export default {
   vertical-align: middle;
   margin: 100px 0px;
 }
+
 .left {
   padding-right: 1px;
   padding-left: 10px;
 }
+
 .right {
   display: flex;
   align-items: center;
@@ -509,26 +491,31 @@ export default {
 .a {
   display: flex;
 }
+
 .b {
   display: flex;
 }
+
 .c {
   display: flex;
 }
+
 .demo-progress .el-progress--line {
   left: 40px;
   margin-bottom: 15px;
   width: 280px;
 }
+
 .right {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .l1::marker {
   color: rgb(120, 128, 141);
   font-size: 40px;
-  
+
 }
 
 .l2::marker {
@@ -540,10 +527,12 @@ export default {
   color: rgb(251, 212, 55);
   font-size: 40px;
 }
+
 .d1 {
   margin-top: 0px;
   font-size: 20px;
 }
+
 .s1 {
   font-size: 30px;
 }

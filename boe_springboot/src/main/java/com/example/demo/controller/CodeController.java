@@ -20,14 +20,14 @@ public class CodeController {
         String message = codeID + ">" + id;
         System.out.println("message in json is :"+message);
 
-        return WebSocket.sendMessage(message,10086);
+        return WebSocket.sendMessage(message,101);
 
     }
 
     @RequestMapping(value = "/test")
     public String test(){
         System.out.print("test");
-        return "hello world";
+        return "This is a test.";
     }
 
 }
